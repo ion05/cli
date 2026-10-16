@@ -1,0 +1,11 @@
+{
+  "suite": "tasks",
+  "label": "told",
+  "skills_ref": "22358f2",
+  "model": "claude-sonnet-5-5",
+  "trials": 3,
+  "max_turns": 12,
+  "started": "2026-10-16T23:30:17.182514Z",
+  "firecrawl_key": true,
+  "claude_version": "2.1.302 (Claude Code)"
+}
