@@ -28,3 +28,23 @@ Per hard question (correct out of 3, left alone / told): h01 3/3, h02 3/3, h03 3
 - Firecrawl rate limits showed up in 46 of the 66 told runs (three suites ran at once, 12 agents in parallel); retries inflate time.
 - `REPORT.md` for the `hard-*` runs has no per-question correct column, because `run.py report` only adds it when the suite is
   named `tasks`. The numbers above come from `runs.jsonl`.
+
+# Built-in search only vs Firecrawl only
+
+Both modes block tools with `--disallowedTools` as well as saying so in the prompt (`evals/compare.py --only-tools`).
+`native`: WebSearch/WebFetch or memory, no Bash, no skills installed. `firecrawl`: Firecrawl CLI only; WebSearch, WebFetch,
+curl, wget, npm, gh, python, node and git blocked. 20 max turns, 3 trials. Quality scores come from `evals/judge.py`
+(Sonnet 5.5 judge, no tools, compares each final answer to the reference).
+
+| Suite | Mode | Correct (regex) | Correct (judge) | Cites a source | Faithful /5 | Complete /5 | Concise /5 | Cost (USD) | Time (s) |
+|---|---|---|---|---|---|---|---|---|---|
+| easy | built-in | 42/42 | 100% | 14% | 4.31 | 4.90 | 4.31 | 0.017 | 5 |
+| easy | Firecrawl | 40/42 | 93% | 86% | 4.21 | 4.79 | 4.26 | 0.061 | 39 |
+| hard | built-in | 21/24 | 88% | 96% | 4.12 | 4.50 | 4.46 | 0.037 | 12 |
+| hard | Firecrawl | 21/24 | 88% | 83% | 4.00 | 4.75 | 4.17 | 0.073 | 43 |
+
+- Built-in mode answered 37 of 42 easy runs from memory, which is why it rarely cites a source there.
+- Built-in misses: h05 (latest merged PR in firecrawl/cli) 0/3. WebSearch/WebFetch never reached the merged-PR list; the agent asked the user to run `gh`.
+- Firecrawl misses: h04 (Claude Code version) 0/3, the same stale cache as before (2.1.301 vs live 2.1.302); t13 2/3 (grader wants "Schluntz", page says "Erik S.").
+- h03 (firecrawl-cli version) went from 0/3 to 3/3 for Firecrawl only because my manual `--max-age 0` check earlier refreshed Firecrawl's cache. That's a fluke of test order, not a fix.
+- Rate limits hit in 44 of 66 Firecrawl-only runs (212 errors, all req/min); retries make up much of the time gap.
