@@ -1,0 +1,38 @@
+{"id":"u01","expect":"use","intent":"search","prompt":"What's the latest stable version of Next.js and when was it released?"}
+{"id":"u02","expect":"use","intent":"search","prompt":"Find the current pricing for Vercel's Pro plan."}
+{"id":"u03","expect":"use","intent":"search","prompt":"Research what changed in Python 3.14 compared to 3.13 and summarize the top 5 changes with sources."}
+{"id":"u04","expect":"use","intent":"search","prompt":"Who are the main competitors to Linear, the issue tracker? Give me a short comparison with sources."}
+{"id":"u05","expect":"use","intent":"scrape","prompt":"Read https://docs.firecrawl.dev/introduction and give me a 5 bullet summary."}
+{"id":"u06","expect":"use","intent":"search","prompt":"What does Stripe's documentation say about API rate limits? I need the default numbers."}
+{"id":"u07","expect":"use","intent":"search-news","prompt":"Find news from the past week about the EU AI Act."}
+{"id":"u08","expect":"use","intent":"crawl","prompt":"Go through all the pages in the Concepts section of the uv docs at https://docs.astral.sh/uv/ and list each page title with a one-line summary."}
+{"id":"u09","expect":"use","intent":"map","prompt":"Find the page in Supabase's docs that explains row level security and give me its exact URL."}
+{"id":"u10","expect":"use","intent":"search","prompt":"Compare the free tiers of Neon, Supabase and PlanetScale for Postgres. Cite where each number comes from."}
+{"id":"u11","expect":"use","intent":"search","prompt":"How many GitHub stars does astral-sh/ruff have right now?"}
+{"id":"u12","expect":"use","intent":"scrape","prompt":"Summarize this article for me: https://www.anthropic.com/engineering/building-effective-agents"}
+{"id":"u13","expect":"use","intent":"scrape","prompt":"What are the top 5 stories on https://news.ycombinator.com right now?"}
+{"id":"u14","expect":"use","intent":"research-index","prompt":"Find three recent research papers on evaluating retrieval-augmented generation systems."}
+{"id":"u15","expect":"use","intent":"developer-index","prompt":"Is there a known GitHub issue about React 19 hydration mismatch errors caused by browser extensions? Link it."}
+{"id":"u16","expect":"use","intent":"search","prompt":"Find the official page that lists OpenAI's model deprecation dates and tell me which models are being retired next."}
+{"id":"u17","expect":"use","intent":"monitor","prompt":"Keep an eye on https://linear.app/pricing and alert me when the prices change."}
+{"id":"u18","expect":"use","intent":"search","prompt":"I'm choosing between Resend and Postmark for transactional email. Look up their current pricing and deliverability features and recommend one."}
+{"id":"u19","expect":"use","intent":"search","prompt":"Look up what the company Firecrawl does and who founded it."}
+{"id":"u20","expect":"use","intent":"interact","prompt":"On https://www.ycombinator.com/companies, filter to the most recent batch and list 10 AI companies from it."}
+{"id":"u21","expect":"use","intent":"search","prompt":"what's the current price of an M4 MacBook Air in the US apple store"}
+{"id":"u22","expect":"use","intent":"agent","prompt":"Build me a list of 10 open-source vector databases with their GitHub URL, license, and the language they're written in."}
+{"id":"u23","expect":"use","intent":"search","prompt":"Google the best practices for writing Claude Code skills and summarize them."}
+{"id":"u24","expect":"use","intent":"scrape","prompt":"What does the changelog at https://github.com/firecrawl/cli/releases say about the most recent release?"}
+{"id":"a01","expect":"avoid","intent":"code","prompt":"Write a Python function that downloads a webpage with requests and extracts all the links with BeautifulSoup."}
+{"id":"a02","expect":"avoid","intent":"knowledge","prompt":"Explain what a web crawler is in two sentences."}
+{"id":"a03","expect":"avoid","intent":"code","prompt":"Fix the bug in this function: def add(a, b): return a - b"}
+{"id":"a04","expect":"avoid","intent":"local-file","prompt":"Summarize the README.md in this folder."}
+{"id":"a05","expect":"avoid","intent":"local-file","prompt":"Turn notes.txt in this directory into a bulleted list."}
+{"id":"a06","expect":"avoid","intent":"knowledge","prompt":"What is 17 times 23?"}
+{"id":"a07","expect":"avoid","intent":"code","prompt":"Write a regex that matches http and https URLs."}
+{"id":"a08","expect":"avoid","intent":"knowledge","prompt":"Explain the difference between HTTP GET and POST requests."}
+{"id":"a09","expect":"avoid","intent":"code","prompt":"Add a /health endpoint to an Express server that returns {status: 'ok'}. Just show the code."}
+{"id":"a10","expect":"avoid","intent":"knowledge","prompt":"What's the difference between scraping and crawling a website?"}
+{"id":"n01","expect":"either","intent":"raw-fetch","prompt":"Fetch https://raw.githubusercontent.com/firecrawl/cli/main/package.json and tell me the version field."}
+{"id":"n02","expect":"either","intent":"api-call","prompt":"Call https://api.github.com/repos/astral-sh/ruff and tell me the stargazers_count."}
+{"id":"n03","expect":"either","intent":"raw-fetch","prompt":"Check whether https://example.com returns HTTP 200."}
+{"id":"n04","expect":"either","intent":"raw-fetch","prompt":"Download https://www.rfc-editor.org/rfc/rfc9110.txt and tell me how many lines it has."}
