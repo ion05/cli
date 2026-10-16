@@ -14,14 +14,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
-SUITES = {"trigger": ROOT / "trigger" / "prompts.jsonl", "tasks": ROOT / "tasks" / "tasks.jsonl"}
+SUITES = {"trigger": ROOT / "trigger" / "prompts.jsonl", "tasks": ROOT / "tasks" / "tasks.jsonl",
+          "subtools": ROOT / "subtools" / "prompts.jsonl"}
 # Only what the child needs to reach the model API; everything else from the
 # parent session (hooks, synced skills, MCP servers) stays out.
 PASS_ENV = ["PATH", "HOME", "ANTHROPIC_BASE_URL", "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN",
             "HTTPS_PROXY", "HTTP_PROXY", "NO_PROXY", "https_proxy", "http_proxy", "no_proxy",
             "NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE", "FIRECRAWL_API_KEY", "FIRECRAWL_API_URL",
             "IS_SANDBOX"]  # IS_SANDBOX lets bypassPermissions run as root in a container
-FC_CMD = re.compile(r"(?:^|[\s;&|(`])(?:npx\s+(?:-y\s+)?firecrawl-cli(?:@\S+)?|firecrawl)\s+([a-z][\w-]*)?")
+FC_CMD = re.compile(r"(?:^|[\s;&|(`])(?:npx\s+(?:-y\s+)?firecrawl-cli(?:@\S+)?|firecrawl)\s+((?:(?:x|experimental)\s+)?[a-z][\w-]*)?")
 OTHER_WEB = re.compile(r"\b(curl|wget|npm view|pip (?:index|download)|gh api|gh repo|gh release|lynx|python3? -c .*(?:urllib|requests))\b")
 
 
@@ -38,7 +39,7 @@ def export_skills(ref, dest):
     subprocess.run(["tar", "-x", "--strip-components=1", "-C", str(dest)], input=tar, check=True)
 
 
-def run_one(case, trial, skills_src, outdir, model, max_turns, timeout):
+def run_one(case, trial, skills_src, outdir, model, max_turns, timeout, fixture_dirs):
     tag = f"{case['id']}-t{trial}"
     tmp = Path(tempfile.mkdtemp(prefix=f"fceval-{tag}-"))
     cfg, work = tmp / "cfg", tmp / "work"
@@ -47,8 +48,9 @@ def run_one(case, trial, skills_src, outdir, model, max_turns, timeout):
         shutil.copytree(skills_src, cfg / "skills")
     else:
         cfg.mkdir()
-    for f in (ROOT / "fixtures").iterdir():
-        shutil.copy(f, work / f.name)
+    for fd in fixture_dirs:
+        for f in fd.iterdir():
+            shutil.copy(f, work / f.name)
     env = {k: os.environ[k] for k in PASS_ENV if k in os.environ}
     env["CLAUDE_CONFIG_DIR"] = str(cfg)
     cmd = ["claude", "-p", case["prompt"], "--model", model, "--output-format", "stream-json", "--verbose",
@@ -92,7 +94,8 @@ def score(case, stream):
                     actions.append("native")
                 elif name == "Bash":
                     c_ = inp.get("command", "")
-                    m = [x or "(bare)" for x in FC_CMD.findall(c_)]
+                    # `firecrawl x download` counts as `download`
+                    m = [x.split()[-1] if x else "(bare)" for x in FC_CMD.findall(c_)]
                     if m:
                         fc_cmds += m
                         actions.append("firecrawl")
@@ -111,11 +114,67 @@ def score(case, stream):
     }
     if not result:
         rec["first_web"] = "error"
-    if "grade" in case:
+    if isinstance(case.get("expect"), list):  # subtools suite: did it run the right command?
+        rec["correct"] = any(c in case["expect"] for c in fc_cmds)
+    elif "grade" in case:
         rec["correct"] = bool(re.search(case["grade"], answer, re.I))
     elif "grade_all" in case:
         rec["correct"] = all(re.search(g, answer, re.I) for g in case["grade_all"])
     return rec
+
+
+def tool_usage(rows):
+    """Count every tool call, every Firecrawl skill load and every `firecrawl <cmd>` shell call.
+    Known Firecrawl skills/commands are listed even at zero so gaps are visible."""
+    known_skills = sorted(p.name for p in (REPO / "skills").iterdir() if p.is_dir()) if (REPO / "skills").is_dir() else []
+    # skill name -> the CLI command it teaches, where they differ
+    rename = {"developer-index": "developer", "research-index": "research"}
+    known_cmds = [rename.get(c, c) for c in (s.removeprefix("firecrawl-") for s in known_skills if s != "firecrawl")]
+    n = len(rows)
+
+    def count(key, known=()):
+        calls, runs = dict.fromkeys(known, 0), dict.fromkeys(known, 0)
+        for r in rows:
+            xs = r.get(key, [])
+            for x in xs:
+                calls[x] = calls.get(x, 0) + 1
+            for x in set(xs):
+                runs[x] = runs.get(x, 0) + 1
+        return {k: {"calls": calls[k], "runs": runs[k]} for k in sorted(calls, key=lambda k: (-calls[k], k))}
+
+    usage = {"runs": n, "builtin_tools": count("tools"),
+             "firecrawl_skills": count("skills", known_skills), "firecrawl_cli": count("fc_cmds", known_cmds)}
+    lines = ["", "## Tool calls", "", f"Across {n} runs. *Runs* = runs that called it at least once.", ""]
+    for title, key, fmt in [("All tool calls (Claude Code tools; `Skill` = any skill load, `Bash` includes Firecrawl CLI calls)", "builtin_tools", "`{}`"),
+                            ("Firecrawl skills loaded", "firecrawl_skills", "`{}`"),
+                            ("Firecrawl CLI commands run in Bash", "firecrawl_cli", "`firecrawl {}`")]:
+        lines += [f"**{title}**", "", "| Tool | Calls | Runs | Calls per run |", "|---|---|---|---|"]
+        for k, v in usage[key].items():
+            lines.append(f"| {fmt.format(k)} | {v['calls']} | {v['runs']} | {v['calls'] / max(n, 1):.2f} |")
+        lines.append("")
+    return usage, lines
+
+
+def subtool_table(rows, cases):
+    """Per intended subtool: how often the agent ran that command, loaded its skill, or ran something else."""
+    out = ["", "## Per subtool", "",
+           "Each prompt names Firecrawl but not the command, so this isolates *which* subtool the agent picks.", "",
+           "| Intended subtool | Ran it | Loaded its skill | Used Firecrawl at all | Commands actually run |", "|---|---|---|---|---|"]
+    by = {}
+    for r in rows:
+        by.setdefault(cases[r["id"]]["intent"], []).append(r)
+    for intent, rs in by.items():
+        k = len(rs)
+        ran = sum(bool(r.get("correct")) for r in rs)
+        skill = sum(any(x == f"firecrawl-{intent}" or x.startswith(f"firecrawl-{intent}-") for x in r.get("skills", [])) for r in rs)
+        anyfc = sum(bool(r.get("used_firecrawl")) for r in rs)
+        cmds = {}
+        for r in rs:
+            for c in r.get("fc_cmds", []):
+                cmds[c] = cmds.get(c, 0) + 1
+        got = ", ".join(f"`{c}` x{v}" for c, v in sorted(cmds.items(), key=lambda kv: -kv[1])) or "-"
+        out.append(f"| {intent} | {ran}/{k} | {skill}/{k} | {anyfc}/{k} | {got} |")
+    return out
 
 
 def cmd_run(a):
@@ -125,6 +184,7 @@ def cmd_run(a):
         cases = [c for c in cases if c["id"] in keep]
     outdir = ROOT / "results" / f"{a.suite}-{a.label}"
     (outdir / "transcripts").mkdir(parents=True, exist_ok=True)
+    fixture_dirs = [d for d in (ROOT / "fixtures", SUITES[a.suite].parent / "fixtures") if d.is_dir()]
     skills_src = None
     if a.skills_ref != "NONE":
         skills_src = Path(tempfile.mkdtemp(prefix="fceval-skills-")) / "skills"
@@ -144,7 +204,7 @@ def cmd_run(a):
     jobs = [(c, t) for c, t in jobs if (c["id"], t) not in done]
     print(f"{len(jobs)} runs to do ({len(done)} already done) -> {outdir}", flush=True)
     with cf.ThreadPoolExecutor(a.concurrency) as ex, rows_path.open("a") as fh:
-        futs = {ex.submit(run_one, c, t, skills_src, outdir, a.model, a.max_turns, a.timeout): (c, t) for c, t in jobs}
+        futs = {ex.submit(run_one, c, t, skills_src, outdir, a.model, a.max_turns, a.timeout, fixture_dirs): (c, t) for c, t in jobs}
         for i, f in enumerate(cf.as_completed(futs), 1):
             c, t = futs[f]
             try:
@@ -198,12 +258,14 @@ def cmd_report(a):
         durs = [r["duration_s"] for r in rows if "duration_s" in r]
         mean = lambda xs: sum(xs) / len(xs) if xs else 0
         lines += ["## Headline", "", "| Metric | Value |", "|---|---|",
-                  f"| Correct answers | {pct(corr, n)} |",
+                  f"| {'Ran the expected Firecrawl command' if meta['suite'] == 'subtools' else 'Correct answers'} | {pct(corr, n)} |",
                   f"| Runs that used Firecrawl | {pct(sum(bool(r.get('used_firecrawl')) for r in rows), n)} |",
                   f"| Runs that used built-in WebSearch/WebFetch | {pct(sum(bool(r.get('used_native')) for r in rows), n)} |",
                   f"| Mean tool calls | {mean(tools):.1f} |", f"| Mean model cost (USD) | {mean(costs):.3f} |",
                   f"| Mean duration (s) | {mean(durs):.0f} |",
                   "", "## Per task", "", "| id | expect / intent | first web tool per trial | Firecrawl skills / commands | correct |", "|---|---|---|---|---|"]
+        if meta["suite"] == "subtools":
+            lines[-5:-5] = subtool_table(rows, cases)
     by = {}
     for r in rows:
         by.setdefault(r["id"], []).append(r)
@@ -212,13 +274,17 @@ def cmd_report(a):
         if not rs:
             continue
         fc = sorted({s for r in rs for s in r.get("skills", []) if s.startswith("firecrawl")} | {f"`{c}`" for r in rs for c in r.get("fc_cmds", [])})
-        row = f"| {cid} | {cases[cid].get('expect', '')} {cases[cid].get('intent')} | {', '.join(r.get('first_web', '?') for r in rs)} | {' '.join(fc) or '-'} |"
-        if meta["suite"] == "tasks":
+        expect = "" if isinstance(cases[cid].get("expect"), list) else cases[cid].get("expect", "")
+        row = f"| {cid} | {expect} {cases[cid].get('intent')} | {', '.join(r.get('first_web', '?') for r in rs)} | {' '.join(fc) or '-'} |"
+        if meta["suite"] != "trigger":
             row += f" {sum(bool(r.get('correct')) for r in rs)}/{len(rs)} |"
         lines.append(row)
     errs = [r for r in rows if r.get("first_web") == "error"]
     if errs:
         lines += ["", f"{len(errs)} run(s) produced no result event (crash or timeout) and count as misses above."]
+    usage, usage_lines = tool_usage(rows)
+    summary["tool_calls"] = usage
+    lines += usage_lines
     (d / "summary.json").write_text(json.dumps(summary, indent=2))
     (d / "REPORT.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))

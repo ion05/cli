@@ -1,12 +1,13 @@
 # Firecrawl skill evals
 
 Measures how a coding agent (Claude Code, headless) uses the Firecrawl CLI skills
-for web research. Two suites:
+for web research. Three suites:
 
 | Suite | File | What it measures |
 |---|---|---|
 | `trigger` | `trigger/prompts.jsonl` | Does the agent reach for Firecrawl when it should, and leave it alone when it shouldn't? 24 web-research prompts (`use`), 10 non-web near-misses (`avoid`), 4 simple fetches where a native fetch is fine (`either`). |
 | `tasks` | `tasks/tasks.jsonl` | Does it get the right answer? 14 research questions with stable, regex-graded answers. Also records Firecrawl use, tool calls, cost and time. |
+| `subtools` | `subtools/prompts.jsonl` | Once the agent is using Firecrawl, does it pick the right command? 24 prompts that say "use Firecrawl" but not which command, 2 per subtool (search, scrape, map, crawl, agent, interact, monitor, download, parse, research, developer, alexandria). Needs `FIRECRAWL_API_KEY`; the monitor prompts create real monitors, so delete them afterwards (`firecrawl monitor list`). |
 
 Each trial runs in a fresh temp dir with a fresh `CLAUDE_CONFIG_DIR` whose
 `skills/` holds only the skill version under test (same place a global
@@ -45,6 +46,10 @@ the same label skips finished trials. Results land in
   or `none` (answered without the web).
 - **false trigger**: Firecrawl used on an `avoid` prompt.
 - **correct** (tasks): regex on the final answer (`grade`, or every pattern in `grade_all`).
+- **correct** (subtools): the agent ran one of the expected `firecrawl <command>`s (`expect`).
+- **Tool calls** (every report): how often each Claude Code tool was called, each
+  Firecrawl skill was loaded, and each `firecrawl <command>` was run in Bash, with
+  every known skill and command listed even at zero.
 
 ## Caveats
 
