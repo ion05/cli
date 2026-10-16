@@ -1,0 +1,7 @@
+{
+  "firecrawl_first_on_web_tasks": 0.05555555555555555,
+  "firecrawl_any_on_web_tasks": 0.08333333333333333,
+  "native_first_on_web_tasks": 0.875,
+  "false_trigger_on_non_web": 0.0,
+  "firecrawl_on_simple_fetch": 0.0
+}

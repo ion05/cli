@@ -1,0 +1,58 @@
+# trigger eval: baseline
+
+Skills `22358f2` · model `claude-sonnet-5-5` · 3 trials · max 8 turns · Firecrawl key: False · 2.1.302 (Claude Code)
+
+## Headline
+
+| Metric | Value |
+|---|---|
+| Web tasks where Firecrawl was the first web tool | 6% (4/72) |
+| Web tasks where Firecrawl was used at all | 8% (6/72) |
+| Web tasks where built-in WebSearch/WebFetch came first | 88% (63/72) |
+| Web tasks where another shell tool (curl, npm view, gh) came first | 3% (2/72) |
+| Web tasks answered with no web tool | 4% (3/72) |
+| Non-web tasks where Firecrawl fired (false trigger) | 0% (0/30) |
+| Simple fetches (raw file, JSON API, status check) where Firecrawl was used | 0% (0/12) |
+
+## Per prompt
+
+| id | expect / intent | first web tool per trial | Firecrawl skills / commands |
+|---|---|---|---|
+| u01 | use search | native, native, native | - |
+| u02 | use search | native, native, native | - |
+| u03 | use search | native, native, native | - |
+| u04 | use search | native, native, native | - |
+| u05 | use scrape | native, native, native | `scrape` |
+| u06 | use search | native, native, native | - |
+| u07 | use search-news | native, native, native | - |
+| u08 | use crawl | native, native, native | `scrape` |
+| u09 | use map | native, native, native | - |
+| u10 | use search | native, native, native | - |
+| u11 | use search | native, other-shell, other-shell | - |
+| u12 | use scrape | native, native, native | - |
+| u13 | use scrape | native, native, native | - |
+| u14 | use research-index | native, native, native | - |
+| u15 | use developer-index | native, native, native | - |
+| u16 | use search | native, native, native | - |
+| u17 | use monitor | firecrawl, firecrawl, firecrawl | firecrawl-monitor |
+| u18 | use search | native, native, native | - |
+| u19 | use search | native, native, native | - |
+| u20 | use interact | firecrawl, native, native | `(bare)` `scrape` firecrawl |
+| u21 | use search | native, native, native | - |
+| u22 | use agent | none, none, none | - |
+| u23 | use search | native, native, native | - |
+| u24 | use scrape | native, native, native | - |
+| a01 | avoid code | none, none, none | - |
+| a02 | avoid knowledge | none, none, none | - |
+| a03 | avoid code | none, none, none | - |
+| a04 | avoid local-file | none, none, none | - |
+| a05 | avoid local-file | none, none, none | - |
+| a06 | avoid knowledge | none, none, none | - |
+| a07 | avoid code | none, none, none | - |
+| a08 | avoid knowledge | none, none, none | - |
+| a09 | avoid code | none, none, none | - |
+| a10 | avoid knowledge | none, none, none | - |
+| n01 | either raw-fetch | native, native, native | - |
+| n02 | either api-call | other-shell, other-shell, other-shell | - |
+| n03 | either raw-fetch | other-shell, other-shell, other-shell | - |
+| n04 | either raw-fetch | other-shell, other-shell, other-shell | - |
