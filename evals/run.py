@@ -22,7 +22,7 @@ PASS_ENV = ["PATH", "HOME", "ANTHROPIC_BASE_URL", "ANTHROPIC_API_KEY", "CLAUDE_C
             "HTTPS_PROXY", "HTTP_PROXY", "NO_PROXY", "https_proxy", "http_proxy", "no_proxy",
             "NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE", "FIRECRAWL_API_KEY", "FIRECRAWL_API_URL",
             "IS_SANDBOX"]  # IS_SANDBOX lets bypassPermissions run as root in a container
-FC_CMD = re.compile(r"(?:^|[\s;&|(`])(?:npx\s+(?:-y\s+)?firecrawl-cli(?:@\S+)?|firecrawl)\s+((?:(?:x|experimental)\s+)?[a-z][\w-]*)?")
+FC_CMD = re.compile(r"(?:^|[\s;&|(`])(?:npx\s+(?:-y\s+)?firecrawl-cli(?:@\S+)?|firecrawl)\s+((?:(?:x|experimental)\s+)?(?:--)?[a-z][\w-]*)?")
 OTHER_WEB = re.compile(r"\b(curl|wget|npm view|pip (?:index|download)|gh api|gh repo|gh release|lynx|python3? -c .*(?:urllib|requests))\b")
 
 
@@ -94,8 +94,8 @@ def score(case, stream):
                     actions.append("native")
                 elif name == "Bash":
                     c_ = inp.get("command", "")
-                    # `firecrawl x download` counts as `download`
-                    m = [x.split()[-1] if x else "(bare)" for x in FC_CMD.findall(c_)]
+                    # `firecrawl x download` counts as `download`, `firecrawl --status` as `status`
+                    m = [x.split()[-1].lstrip("-") if x else "(bare)" for x in FC_CMD.findall(c_)]
                     if m:
                         fc_cmds += m
                         actions.append("firecrawl")

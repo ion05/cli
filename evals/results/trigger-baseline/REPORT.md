@@ -37,7 +37,7 @@ Skills `22358f2` · model `claude-sonnet-5-5` · 3 trials · max 8 turns · Fire
 | u17 | use monitor | firecrawl, firecrawl, firecrawl | firecrawl-monitor |
 | u18 | use search | native, native, native | - |
 | u19 | use search | native, native, native | - |
-| u20 | use interact | firecrawl, native, native | `(bare)` `scrape` firecrawl |
+| u20 | use interact | firecrawl, native, native | `scrape` `status` firecrawl |
 | u21 | use search | native, native, native | - |
 | u22 | use agent | none, none, none | - |
 | u23 | use search | native, native, native | - |
@@ -96,7 +96,7 @@ Across 114 runs. *Runs* = runs that called it at least once.
 | Tool | Calls | Runs | Calls per run |
 |---|---|---|---|
 | `firecrawl scrape` | 3 | 3 | 0.03 |
-| `firecrawl (bare)` | 1 | 1 | 0.01 |
+| `firecrawl status` | 1 | 1 | 0.01 |
 | `firecrawl agent` | 0 | 0 | 0.00 |
 | `firecrawl alexandria` | 0 | 0 | 0.00 |
 | `firecrawl crawl` | 0 | 0 | 0.00 |

@@ -39,3 +39,26 @@ agent's *first choice* of tool, not answer quality. See `trigger-*/REPORT.md` fo
 - WebFetch was also blocked for most domains in this container, so behaviour *after* the
   first call (fallbacks) is distorted. The first-choice metric is not.
 - One model, one agent. Codex and Haiku/Opus not run yet.
+
+## Subtool choice (`subtools-baseline`, 2026-10-16)
+
+Same model and skills, with a Firecrawl key. 24 prompts say "use Firecrawl" but not which
+command, 2 per subtool, 3 trials (72 runs, $5.30 model cost, ~380 Firecrawl credits).
+Once told to use Firecrawl the agent always does (72/72, no WebSearch/WebFetch), and it
+ran the expected command in 74% (53/72). Full counts in `subtools-baseline/REPORT.md`.
+
+| Intended subtool | Ran it | What happened instead |
+|---|---|---|
+| scrape, map, interact, download, parse, research, alexandria | 6/6 each | - |
+| search | 4/6 | Router went straight to `scrape` on a guessed URL (s01) |
+| crawl | 4/6 | Looped `scrape`/`map` instead of one `crawl` |
+| developer | 2/6 | Loaded the skill, then scraped GitHub pages instead of `firecrawl developer` |
+| monitor | 1/6 | Loaded the skill every time, then stopped to ask for an alert email: a prompt artifact, not a routing miss |
+| agent | **0/6** | Never chosen; multi-page extraction was done with 2-10 `scrape` calls each |
+
+- **`scrape` is the default for everything.** 103 of 222 Firecrawl calls; it absorbs the
+  search, crawl, developer and agent intents.
+- **`agent` is never picked**, even for "go through a directory and return JSON".
+- `firecrawl --status` was run first in 7 runs (crawl and agent prompts), counted as `status`.
+- Many runs hit Firecrawl rate limits at 3 concurrent runs and retried; results are still
+  complete, but durations are inflated.
