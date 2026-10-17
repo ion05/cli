@@ -15,7 +15,7 @@ Original = upstream skills 22358f2. PR #4 = skills at 729e12b. Quality scores fr
   - **Pricing slider** (c10, c12, Tavily): 4/6 → 6/6. Built-in fetch summarized the page and missed the plans hidden behind the slider. Firecrawl's rendered scrape saw them.
   - **GitHub** (c15, star count): 1/3 → 3/3. In this environment GitHub refuses built-in fetch and `curl` (403). That is partly an artifact of the eval container.
   - **Exact pricing** (c17, c23): 2/6 → 5/6. Built-in search answered from third-party pricing roundups, and its fetch tool summarizes pages and drops details.
-- Where it doesn't: sites that block bots (G2, LMArena, npm) were 14/15 for built-in too. Built-in search runs on Anthropic's servers and gets those pages anyway, so blocking alone didn't hurt it.
+- Where it doesn't: sites that block bots (G2, LMArena, npm, PyPI) were 14/15 for the original skills too. Built-in search runs on Anthropic's servers and gets those pages anyway, so blocking alone didn't hurt it.
 - **`interact` and `agent` were never used.** PR #4 ran `search` 58 times and `scrape` 59 times. A rendered scrape already showed the slider and the job list, so nothing needed a click. A real test of interact would need tasks that require typing, logging in or paging through results.
 - Cost per run is 20% higher with Firecrawl ($0.061 → $0.073); time is the same (16s).
 
