@@ -15,7 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 SUITES = {"trigger": ROOT / "trigger" / "prompts.jsonl", "tasks": ROOT / "tasks" / "tasks.jsonl",
-          "subtools": ROOT / "subtools" / "prompts.jsonl", "hard": ROOT / "tasks" / "hard.jsonl"}
+          "subtools": ROOT / "subtools" / "prompts.jsonl", "hard": ROOT / "tasks" / "hard.jsonl",
+          "natural": ROOT / "tasks" / "natural.jsonl"}
 # Only what the child needs to reach the model API; everything else from the
 # parent session (hooks, synced skills, MCP servers) stays out.
 PASS_ENV = ["PATH", "HOME", "ANTHROPIC_BASE_URL", "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN",
@@ -114,7 +115,7 @@ def score(case, stream):
         "used_native": "native" in actions,
         "skills": skills, "fc_cmds": fc_cmds, "fc_api": fc_api, "n_tools": len(tools), "tools": tools,
         "num_turns": result.get("num_turns"), "cost_usd": result.get("total_cost_usd"),
-        "result_subtype": result.get("subtype"), "answer": answer[-1500:],
+        "result_subtype": result.get("subtype"), "answer": answer[-4000:],
     }
     if not result:
         rec["first_web"] = "error"

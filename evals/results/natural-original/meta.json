@@ -1,0 +1,11 @@
+{
+  "suite": "natural",
+  "label": "original",
+  "skills_ref": "22358f2",
+  "model": "claude-sonnet-5-5",
+  "trials": 3,
+  "max_turns": 20,
+  "started": "2026-10-17T02:32:19.901908Z",
+  "firecrawl_key": true,
+  "claude_version": "2.1.302 (Claude Code)"
+}
