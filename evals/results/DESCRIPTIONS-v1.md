@@ -44,3 +44,22 @@ Sonnet 5.5, 3 trials, 8 max turns.
   why mean tool calls went up (3.2 → 5.1) and cost rose about 27%. Those two numbers will look
   different with a working key.
 - One model (Sonnet 5.5), one agent (Claude Code), 3 trials.
+
+## v2: shorter descriptions (dead end)
+
+Aayan asked for shorter descriptions to save context. Fable cut the three to 652 chars
+(v1: 1476, upstream: 921). Firecrawl-first fell from 61/72 to **36/72**; false triggers
+stayed 0/42. Papers (u14), GitHub issues (u15), URL summaries (u12) and the OpenAI
+deprecations page (u16) went back to WebSearch/WebFetch in every trial. What it lost: the
+imperative "Use instead of …" opener (v2 said "Prefer over"), and the catch-all
+"whenever the answer depends on information from the web". Results in `trigger-desc-v2/`.
+
+## v3: Firecrawl for anything that needs the internet (not yet evaluated)
+
+Per Aayan: recommend Firecrawl for any internet access and drop the curl / raw-file /
+JSON-API exceptions; keep the non-web exclusions (scraping code, local files). Restores the
+imperative opener and the catch-all, names papers and GitHub issues in the router, and
+points scrape to `firecrawl-interact` for clicking, typing, login or pagination. 809 chars
+total. Expect the `either` prompts (simple fetches) to move to Firecrawl by design.
+Risk: `firecrawl scrape` serves cached copies up to 2 days old by default, so routing raw
+JSON APIs (e.g. npm `latest`) through it can return stale values unless `--max-age 0` is used.
