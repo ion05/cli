@@ -1,7 +1,7 @@
 ---
 name: firecrawl-parse
 description: |
-  Convert a local document (PDF, DOCX, XLSX, PPTX, HTML, …) to markdown, or answer questions about its content. Use whenever the input is a document file path rather than a URL. Not for plain code or text files, which Read handles.
+  Convert or extract text from a local document (PDF, DOCX, XLSX, PPTX, HTML, …) as markdown, or answer questions about its content. Use instead of pdftotext or similar converters whenever the input is a document file path rather than a URL. Not for plain code or text files, which Read handles.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)
