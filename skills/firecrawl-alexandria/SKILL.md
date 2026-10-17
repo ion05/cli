@@ -1,6 +1,7 @@
 ---
 name: firecrawl-alexandria
-description: Find a direct path to structured data through ready-made workflows, data APIs, and indexes. Follow the search skill to discover and inspect tools, then the scrape skill to execute them.
+description: |
+  Get structured data from a ready-made data API or workflow instead of curl or scraping HTML: top stories, repo stats, listings, prices, datasets. Find one with `firecrawl search alexandria '<data>'` or `firecrawl find-tools <url>`, then run it with `firecrawl scrape <provider/capability>`. If no provider fits, `firecrawl scrape` the site's API URL rather than curl it.
 ---
 
 # A direct path to structured data
