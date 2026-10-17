@@ -1,7 +1,7 @@
 ---
 name: firecrawl-map
 description: |
-  Find which page on a known site covers a topic, or list a site's URLs: "find the page on X about Y", "which URL documents Z", "what pages are under /docs". Use instead of guessing a URL and fetching it, or a web search. Returns URLs only; scrape the one you pick.
+  Find which page on a known site covers a topic, or list a site's URLs: "find the page on X about Y", "which URL documents Z", "what pages are under /docs". Run `map <url> --search "<topic>"`, then scrape the top match, instead of guessing a URL or running a web search.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)
