@@ -16,7 +16,8 @@ ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 SUITES = {"trigger": ROOT / "trigger" / "prompts.jsonl", "tasks": ROOT / "tasks" / "tasks.jsonl",
           "subtools": ROOT / "subtools" / "prompts.jsonl", "hard": ROOT / "tasks" / "hard.jsonl",
-          "natural": ROOT / "tasks" / "natural.jsonl"}
+          "natural": ROOT / "tasks" / "natural.jsonl",
+          "complex": ROOT / "tasks" / "complex.jsonl"}
 # Only what the child needs to reach the model API; everything else from the
 # parent session (hooks, synced skills, MCP servers) stays out.
 PASS_ENV = ["PATH", "HOME", "ANTHROPIC_BASE_URL", "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN",
