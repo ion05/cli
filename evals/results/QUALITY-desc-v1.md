@@ -1,5 +1,8 @@
 # Quality with the v1 skill descriptions (PR #4), Claude choosing its own tools
 
+> Measured on the **v1** descriptions (commit 3db3d63), merged in from PR #5. The current v3 descriptions
+> (no curl / JSON-API exception, see `DESCRIPTIONS-v1.md`) have not been quality-tested yet.
+
 No tool named in the prompt, nothing blocked. Sonnet 5.5, 3 trials, concurrency 2, run 2026-10-17.
 Easy = `tasks` (12 max turns), hard = `evals/tasks/hard.jsonl` (20 max turns). Quality columns come from `evals/judge.py`.
 Two hard answers moved overnight and were updated before these runs: h03 firecrawl-cli 1.26.7 → 1.26.8,
