@@ -84,7 +84,9 @@ def make_run_one(harness, arm):
         (tmp / "home").mkdir(exist_ok=True)
         subprocess.run(["git", "init", "-q"], cwd=work)  # stops upward config/AGENTS.md discovery
         cmd, extra = SETUP[harness](tmp, work, skills_src, arm, max_turns)
-        env = {k: os.environ[k] for k in R.PASS_ENV if k in os.environ and k != "FIRECRAWL_API_KEY"}
+        # local agents only talk to Ollama: no Anthropic credentials, Firecrawl key only in the mine arm
+        env = {k: os.environ[k] for k in R.PASS_ENV if k in os.environ and k != "FIRECRAWL_API_KEY"
+               and not k.startswith(("ANTHROPIC", "CLAUDE"))}
         env.update(extra, HOME=str(tmp / "home"))
         if arm == "mine":
             env["FIRECRAWL_API_KEY"] = os.environ["FIRECRAWL_API_KEY"]
