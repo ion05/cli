@@ -1,0 +1,24 @@
+{"id": "s01", "expect": ["search"], "intent": "search", "prompt": "Use Firecrawl to find out what the latest stable release of Bun is and its release date."}
+{"id": "s02", "expect": ["search"], "intent": "search", "prompt": "Using Firecrawl, find three recent blog posts comparing Postgres and MySQL performance and list their URLs."}
+{"id": "s03", "expect": ["scrape"], "intent": "scrape", "prompt": "Use Firecrawl to read https://docs.firecrawl.dev/introduction and give me a 3 bullet summary."}
+{"id": "s04", "expect": ["scrape"], "intent": "scrape", "prompt": "Using Firecrawl, get the contents of https://www.python.org/downloads/ and tell me the newest Python version listed."}
+{"id": "s05", "expect": ["map"], "intent": "map", "prompt": "Use Firecrawl to list the URLs on docs.firecrawl.dev that are about webhooks."}
+{"id": "s06", "expect": ["map"], "intent": "map", "prompt": "Using Firecrawl, find the page on https://supabase.com/docs that documents Row Level Security and give me its URL."}
+{"id": "s07", "expect": ["crawl"], "intent": "crawl", "prompt": "Use Firecrawl to pull every page under https://docs.firecrawl.dev/features (at most 10 pages) and give me a one-line summary of each."}
+{"id": "s08", "expect": ["crawl"], "intent": "crawl", "prompt": "Using Firecrawl, collect the content of the first 8 pages under https://docs.astral.sh/uv/guides/ and tell me which guides exist."}
+{"id": "s09", "expect": ["agent"], "intent": "agent", "prompt": "Use Firecrawl to find the monthly price of the Hobby, Standard and Growth plans on firecrawl.dev and return them as JSON.", "note": "Weak prompt: names one known pricing page, so scrape is a reasonable choice"}
+{"id": "s10", "expect": ["agent"], "intent": "agent", "prompt": "Using Firecrawl, go through the Y Combinator company directory and find 5 current YC companies building developer tools for AI agents, with their websites, as a JSON list."}
+{"id": "s11", "expect": ["interact"], "intent": "interact", "prompt": "Use Firecrawl to open https://news.ycombinator.com, click the 'new' link at the top, and tell me the title of the first story on that page."}
+{"id": "s12", "expect": ["interact"], "intent": "interact", "prompt": "Using Firecrawl, go to https://www.wikipedia.org, type 'Firecrawl' into the search box, submit it, and tell me which page you land on."}
+{"id": "s13", "expect": ["monitor"], "intent": "monitor", "prompt": "Use Firecrawl to watch https://example.com and alert me when its content changes. Check once a day.", "accept_skill": ["firecrawl-monitor"]}
+{"id": "s14", "expect": ["monitor"], "intent": "monitor", "prompt": "Using Firecrawl, set up a weekly check on https://www.iana.org/help/example-domains so I find out if the page changes.", "accept_skill": ["firecrawl-monitor"]}
+{"id": "s15", "expect": ["download"], "intent": "download", "prompt": "Use Firecrawl to save https://docs.firecrawl.dev/sdks as local markdown files so I can read them offline (at most 5 pages)."}
+{"id": "s16", "expect": ["download"], "intent": "download", "prompt": "Using Firecrawl, download a local copy of the first 5 pages of https://docs.astral.sh/ruff/ into this folder."}
+{"id": "s17", "expect": ["parse"], "intent": "parse", "prompt": "Use Firecrawl to turn the local file invoice.pdf into markdown and tell me the total amount due."}
+{"id": "s18", "expect": ["parse"], "intent": "parse", "prompt": "Using Firecrawl, extract the text from ./invoice.pdf and tell me who the invoice is billed to."}
+{"id": "s19", "expect": ["research"], "intent": "research", "prompt": "Use Firecrawl to find recent research papers on GLP-1 receptor agonists and kidney outcomes. List 3 with titles."}
+{"id": "s20", "expect": ["research"], "intent": "research", "prompt": "Using Firecrawl, find arXiv papers on speculative decoding for LLM inference. Give me 3 titles."}
+{"id": "s21", "expect": ["developer"], "intent": "developer", "prompt": "Use Firecrawl to find open GitHub issues in the vercel/next.js repo about turbopack memory leaks. List 3."}
+{"id": "s22", "expect": ["developer"], "intent": "developer", "prompt": "Using Firecrawl, find merged pull requests in astral-sh/uv that added support for workspaces. Give me 2 links."}
+{"id": "s23", "expect": ["alexandria", "find-tools", "list", "list-tools"], "intent": "alexandria", "prompt": "Use Firecrawl to get structured data on the current top 5 stories on Hacker News (title, points, url) from a ready-made data source rather than scraping the page."}
+{"id": "s24", "expect": ["alexandria", "find-tools", "list", "list-tools"], "intent": "alexandria", "prompt": "Using Firecrawl, find a ready-made data API or workflow for GitHub repository stats and use it to get the star count of firecrawl/firecrawl."}

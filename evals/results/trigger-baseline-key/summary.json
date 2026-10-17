@@ -1,0 +1,145 @@
+{
+  "firecrawl_first_on_web_tasks": 0.05555555555555555,
+  "firecrawl_any_on_web_tasks": 0.05555555555555555,
+  "native_first_on_web_tasks": 0.8611111111111112,
+  "false_trigger_on_non_web": 0.0,
+  "firecrawl_on_simple_fetch": 0.0,
+  "tool_calls": {
+    "runs": 114,
+    "builtin_tools": {
+      "WebFetch": {
+        "calls": 130,
+        "runs": 45
+      },
+      "ToolSearch": {
+        "calls": 70,
+        "runs": 67
+      },
+      "WebSearch": {
+        "calls": 42,
+        "runs": 33
+      },
+      "Bash": {
+        "calls": 33,
+        "runs": 19
+      },
+      "Read": {
+        "calls": 6,
+        "runs": 6
+      },
+      "Skill": {
+        "calls": 4,
+        "runs": 4
+      },
+      "Write": {
+        "calls": 4,
+        "runs": 4
+      }
+    },
+    "firecrawl_skills": {
+      "firecrawl-monitor": {
+        "calls": 3,
+        "runs": 3
+      },
+      "firecrawl-research-index": {
+        "calls": 1,
+        "runs": 1
+      },
+      "firecrawl": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-agent": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-alexandria": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-crawl": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-developer-index": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-download": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-interact": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-map": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-parse": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-scrape": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-search": {
+        "calls": 0,
+        "runs": 0
+      }
+    },
+    "firecrawl_cli": {
+      "research": {
+        "calls": 1,
+        "runs": 1
+      },
+      "agent": {
+        "calls": 0,
+        "runs": 0
+      },
+      "alexandria": {
+        "calls": 0,
+        "runs": 0
+      },
+      "crawl": {
+        "calls": 0,
+        "runs": 0
+      },
+      "developer": {
+        "calls": 0,
+        "runs": 0
+      },
+      "download": {
+        "calls": 0,
+        "runs": 0
+      },
+      "interact": {
+        "calls": 0,
+        "runs": 0
+      },
+      "map": {
+        "calls": 0,
+        "runs": 0
+      },
+      "monitor": {
+        "calls": 0,
+        "runs": 0
+      },
+      "parse": {
+        "calls": 0,
+        "runs": 0
+      },
+      "scrape": {
+        "calls": 0,
+        "runs": 0
+      },
+      "search": {
+        "calls": 0,
+        "runs": 0
+      }
+    },
+    "firecrawl_api": {}
+  }
+}

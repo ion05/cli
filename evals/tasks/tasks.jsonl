@@ -1,0 +1,14 @@
+{"id":"t01","intent":"scrape","prompt":"According to the official Python docs, what is the default maxsize of functools.lru_cache?","answer":"128","grade":"\\b128\\b"}
+{"id":"t02","intent":"search","prompt":"According to the uv documentation, which command creates a new Python project?","answer":"uv init","grade":"uv init"}
+{"id":"t03","intent":"map","prompt":"In Supabase's docs on Row Level Security, what SQL statement enables RLS on a table? Give the statement and the docs URL.","answer":"alter table <name> enable row level security","grade":"enable row level security"}
+{"id":"t04","intent":"search","prompt":"What HTTP status code does the Stripe API return when you exceed its rate limit? Cite the Stripe docs page.","answer":"429","grade":"\\b429\\b"}
+{"id":"t05","intent":"scrape","prompt":"Read https://www.anthropic.com/engineering/building-effective-agents and list the workflow patterns it describes.","answer":"prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer","grade_all":["chaining","routing","paralleli","orchestrator","evaluator"]}
+{"id":"t06","intent":"search","prompt":"What is the default port of the Vite dev server according to the Vite docs?","answer":"5173","grade":"\\b5173\\b"}
+{"id":"t07","intent":"search","prompt":"What license is the firecrawl/firecrawl GitHub repository released under?","answer":"AGPL-3.0","grade":"AGPL"}
+{"id":"t08","intent":"search","prompt":"Which RFC number defines HTTP Semantics, published in June 2022?","answer":"RFC 9110","grade":"9110"}
+{"id":"t09","intent":"scrape","prompt":"In the Tailwind CSS docs, what is the default min-width of the md breakpoint?","answer":"48rem / 768px","grade":"(48rem|768 ?px)"}
+{"id":"t10","intent":"scrape","prompt":"According to the agentskills.io specification, what is the maximum length of a skill's description field?","answer":"1024 characters","grade":"\\b1,?024\\b"}
+{"id":"t11","intent":"search","prompt":"In the PostgreSQL documentation, what is the default value of max_connections?","answer":"100","grade":"\\b100\\b"}
+{"id":"t12","intent":"scrape","prompt":"What is the title of the Hacker News item with id 1?","answer":"Y Combinator","grade":"Y Combinator"}
+{"id":"t13","intent":"search","prompt":"Who are the two authors of Anthropic's 'Building effective agents' post?","answer":"Erik Schluntz and Barry Zhang","grade_all":["Schluntz","Zhang"]}
+{"id":"t14","intent":"map","prompt":"In The Rust Programming Language book online, which chapter number is 'Understanding Ownership'?","answer":"4","grade":"(chapter|ch\\.?)\\s*4\\b"}

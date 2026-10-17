@@ -1,0 +1,11 @@
+{
+  "suite": "trigger",
+  "label": "baseline",
+  "skills_ref": "22358f2",
+  "model": "claude-sonnet-5-5",
+  "trials": 3,
+  "max_turns": 8,
+  "started": "2026-10-16T23:05:48.367171Z",
+  "firecrawl_key": false,
+  "claude_version": "2.1.302 (Claude Code)"
+}
