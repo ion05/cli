@@ -23,6 +23,8 @@ PASS_ENV = ["PATH", "HOME", "ANTHROPIC_BASE_URL", "ANTHROPIC_API_KEY", "CLAUDE_C
             "NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE", "FIRECRAWL_API_KEY", "FIRECRAWL_API_URL",
             "IS_SANDBOX"]  # IS_SANDBOX lets bypassPermissions run as root in a container
 FC_CMD = re.compile(r"(?:^|[\s;&|(`])(?:npx\s+(?:-y\s+)?firecrawl-cli(?:@\S+)?|firecrawl)\s+((?:(?:x|experimental)\s+)?(?:--)?[a-z][\w-]*)?")
+# Direct HTTP calls to the Firecrawl API (the developer-index skill documents this route for repo/PR filters)
+FC_API = re.compile(r"api\.firecrawl\.dev/v\d+/([a-z-]+)(?:/([a-z-]+))?")
 OTHER_WEB = re.compile(r"\b(curl|wget|npm view|pip (?:index|download)|gh api|gh repo|gh release|lynx|python3? -c .*(?:urllib|requests))\b")
 
 
@@ -76,7 +78,7 @@ def score(case, stream):
             events.append(json.loads(line))
         except json.JSONDecodeError:
             pass
-    actions, skills, fc_cmds, tools = [], [], [], []
+    actions, skills, fc_cmds, fc_api, tools = [], [], [], [], []
     result = {}
     for e in events:
         if e.get("type") == "assistant":
@@ -96,8 +98,10 @@ def score(case, stream):
                     c_ = inp.get("command", "")
                     # `firecrawl x download` counts as `download`, `firecrawl --status` as `status`
                     m = [x.split()[-1].lstrip("-") if x else "(bare)" for x in FC_CMD.findall(c_)]
-                    if m:
+                    api = [b if a == "search" and b in ("developer", "research", "gov") else a for a, b in FC_API.findall(c_)]
+                    if m or api:
                         fc_cmds += m
+                        fc_api += api
                         actions.append("firecrawl")
                     elif OTHER_WEB.search(c_):
                         actions.append("other-shell")
@@ -108,14 +112,17 @@ def score(case, stream):
         "first_web": actions[0] if actions else "none",
         "used_firecrawl": "firecrawl" in actions,
         "used_native": "native" in actions,
-        "skills": skills, "fc_cmds": fc_cmds, "n_tools": len(tools), "tools": tools,
+        "skills": skills, "fc_cmds": fc_cmds, "fc_api": fc_api, "n_tools": len(tools), "tools": tools,
         "num_turns": result.get("num_turns"), "cost_usd": result.get("total_cost_usd"),
         "result_subtype": result.get("subtype"), "answer": answer[-1500:],
     }
     if not result:
         rec["first_web"] = "error"
     if isinstance(case.get("expect"), list):  # subtools suite: did it run the right command?
-        rec["correct"] = any(c in case["expect"] for c in fc_cmds)
+        # A direct API call to the same endpoint counts, and so does loading an `accept_skill`
+        # (monitor: the agent loads the skill, then has to ask for an alert address before creating one).
+        rec["correct"] = (any(c in case["expect"] for c in fc_cmds + fc_api)
+                          or any(sk in case.get("accept_skill", []) for sk in skills))
     elif "grade" in case:
         rec["correct"] = bool(re.search(case["grade"], answer, re.I))
     elif "grade_all" in case:
@@ -143,11 +150,15 @@ def tool_usage(rows):
         return {k: {"calls": calls[k], "runs": runs[k]} for k in sorted(calls, key=lambda k: (-calls[k], k))}
 
     usage = {"runs": n, "builtin_tools": count("tools"),
-             "firecrawl_skills": count("skills", known_skills), "firecrawl_cli": count("fc_cmds", known_cmds)}
+             "firecrawl_skills": count("skills", known_skills), "firecrawl_cli": count("fc_cmds", known_cmds),
+             "firecrawl_api": count("fc_api")}
     lines = ["", "## Tool calls", "", f"Across {n} runs. *Runs* = runs that called it at least once.", ""]
     for title, key, fmt in [("All tool calls (Claude Code tools; `Skill` = any skill load, `Bash` includes Firecrawl CLI calls)", "builtin_tools", "`{}`"),
                             ("Firecrawl skills loaded", "firecrawl_skills", "`{}`"),
-                            ("Firecrawl CLI commands run in Bash", "firecrawl_cli", "`firecrawl {}`")]:
+                            ("Firecrawl CLI commands run in Bash", "firecrawl_cli", "`firecrawl {}`"),
+                            ("Firecrawl API endpoints called directly (curl)", "firecrawl_api", "`{}`")]:
+        if not usage[key]:
+            continue
         lines += [f"**{title}**", "", "| Tool | Calls | Runs | Calls per run |", "|---|---|---|---|"]
         for k, v in usage[key].items():
             lines.append(f"| {fmt.format(k)} | {v['calls']} | {v['runs']} | {v['calls'] / max(n, 1):.2f} |")
@@ -158,7 +169,9 @@ def tool_usage(rows):
 def subtool_table(rows, cases):
     """Per intended subtool: how often the agent ran that command, loaded its skill, or ran something else."""
     out = ["", "## Per subtool", "",
-           "Each prompt names Firecrawl but not the command, so this isolates *which* subtool the agent picks.", "",
+           "Each prompt names Firecrawl but not the command, so this isolates *which* subtool the agent picks. "
+           "*Ran it* also counts a curl to the same API endpoint, and for monitor, loading the skill "
+           "(it then has to ask for an alert address before it can create one).", "",
            "| Intended subtool | Ran it | Loaded its skill | Used Firecrawl at all | Commands actually run |", "|---|---|---|---|---|"]
     by = {}
     for r in rows:
@@ -170,7 +183,7 @@ def subtool_table(rows, cases):
         anyfc = sum(bool(r.get("used_firecrawl")) for r in rs)
         cmds = {}
         for r in rs:
-            for c in r.get("fc_cmds", []):
+            for c in r.get("fc_cmds", []) + [f"{c} (API)" for c in r.get("fc_api", [])]:
                 cmds[c] = cmds.get(c, 0) + 1
         got = ", ".join(f"`{c}` x{v}" for c, v in sorted(cmds.items(), key=lambda kv: -kv[1])) or "-"
         out.append(f"| {intent} | {ran}/{k} | {skill}/{k} | {anyfc}/{k} | {got} |")
@@ -266,6 +279,7 @@ def cmd_report(a):
                   "", "## Per task", "", "| id | expect / intent | first web tool per trial | Firecrawl skills / commands | correct |", "|---|---|---|---|---|"]
         if meta["suite"] == "subtools":
             lines[-5:-5] = subtool_table(rows, cases)
+            lines[-2:] = ["| id | intent | first web tool per trial | Firecrawl skills / commands | ran it | note |", "|---|---|---|---|---|---|"]
     by = {}
     for r in rows:
         by.setdefault(r["id"], []).append(r)
@@ -278,6 +292,8 @@ def cmd_report(a):
         row = f"| {cid} | {expect} {cases[cid].get('intent')} | {', '.join(r.get('first_web', '?') for r in rs)} | {' '.join(fc) or '-'} |"
         if meta["suite"] != "trigger":
             row += f" {sum(bool(r.get('correct')) for r in rs)}/{len(rs)} |"
+            if meta["suite"] == "subtools":
+                row += f" {cases[cid].get('note', '')} |"
         lines.append(row)
     errs = [r for r in rows if r.get("first_web") == "error"]
     if errs:

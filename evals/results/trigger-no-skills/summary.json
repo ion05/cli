@@ -135,6 +135,7 @@
         "calls": 0,
         "runs": 0
       }
-    }
+    },
+    "firecrawl_api": {}
   }
 }

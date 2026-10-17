@@ -45,20 +45,25 @@ agent's *first choice* of tool, not answer quality. See `trigger-*/REPORT.md` fo
 Same model and skills, with a Firecrawl key. 24 prompts say "use Firecrawl" but not which
 command, 2 per subtool, 3 trials (72 runs, $5.30 model cost, ~380 Firecrawl credits).
 Once told to use Firecrawl the agent always does (72/72, no WebSearch/WebFetch), and it
-ran the expected command in 74% (53/72). Full counts in `subtools-baseline/REPORT.md`.
+picked the expected subtool in 86% (62/72). Full counts in `subtools-baseline/REPORT.md`.
 
-| Intended subtool | Ran it | What happened instead |
+Scoring: a run counts when it ran the expected `firecrawl <command>`, or called the same
+endpoint with curl (the developer-index skill documents the HTTP API as the route for
+repo/PR filters), or, for monitor, loaded `firecrawl-monitor` and stopped to ask for an
+alert address (it cannot create a monitor without one).
+
+| Intended subtool | Picked it | What happened instead |
 |---|---|---|
-| scrape, map, interact, download, parse, research, alexandria | 6/6 each | - |
+| scrape, map, interact, monitor, download, parse, research, developer, alexandria | 6/6 each | - |
 | search | 4/6 | Router went straight to `scrape` on a guessed URL (s01) |
 | crawl | 4/6 | Looped `scrape`/`map` instead of one `crawl` |
-| developer | 2/6 | Loaded the skill, then scraped GitHub pages instead of `firecrawl developer` |
-| monitor | 1/6 | Loaded the skill every time, then stopped to ask for an alert email: a prompt artifact, not a routing miss |
-| agent | **0/6** | Never chosen; multi-page extraction was done with 2-10 `scrape` calls each |
+| agent | **0/6** | Never chosen; did 2-10 `scrape` calls instead. s09 is a weak prompt (one known pricing page, so `scrape` is reasonable); s10 (walk a directory, return JSON) is the real miss |
 
-- **`scrape` is the default for everything.** 103 of 222 Firecrawl calls; it absorbs the
-  search, crawl, developer and agent intents.
+- **`scrape` is the default for everything.** 103 of 222 CLI calls; it absorbs the
+  search, crawl and agent intents.
 - **`agent` is never picked**, even for "go through a directory and return JSON".
 - `firecrawl --status` was run first in 7 runs (crawl and agent prompts), counted as `status`.
-- Many runs hit Firecrawl rate limits at 3 concurrent runs and retried; results are still
-  complete, but durations are inflated.
+- **Account limits distorted the run.** At 3 parallel runs on a plan with 2 concurrent
+  jobs: 126 "Rate limit exceeded" and 13 "maximum number of concurrent jobs" errors.
+  Parallel runs also shared the CLI's "last scrape" state, so a few interact runs (s11,
+  s12) picked up another run's page. Re-run with `--concurrency 1` for clean numbers.
