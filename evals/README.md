@@ -1,12 +1,13 @@
 # Firecrawl skill evals
 
 Measures how a coding agent (Claude Code, headless) uses the Firecrawl CLI skills
-for web research. Three suites:
+for web research. Four suites:
 
 | Suite | File | What it measures |
 |---|---|---|
 | `trigger` | `trigger/prompts.jsonl` | Does the agent reach for Firecrawl when it should, and leave it alone when it shouldn't? 24 web-research prompts (`use`), 10 non-web near-misses (`avoid`), 4 simple fetches where a native fetch is fine (`either`). |
 | `tasks` | `tasks/tasks.jsonl` | Does it get the right answer? 14 research questions with stable, regex-graded answers. Also records Firecrawl use, tool calls, cost and time. |
+| `hard` | `tasks/hard.jsonl` | 8 regex-graded questions about facts newer than the model's training data, so it has to go to the web. Run through `compare.py`. |
 | `subtools` | `subtools/prompts.jsonl` | Once the agent is using Firecrawl, does it pick the right command? 24 prompts that say "use Firecrawl" but not which command, 2 per subtool (search, scrape, map, crawl, agent, interact, monitor, download, parse, research, developer, alexandria). Needs `FIRECRAWL_API_KEY`; the monitor prompts create real monitors, so delete them afterwards (`firecrawl monitor list`). |
 
 Each trial runs in a fresh temp dir with a fresh `CLAUDE_CONFIG_DIR` whose
@@ -30,6 +31,20 @@ python3 evals/run.py run --suite trigger --skills-ref WORKTREE --label v1
 
 # control: no Firecrawl skills installed
 python3 evals/run.py run --suite trigger --skills-ref NONE --label no-skills
+```
+
+Quality comparisons (`compare.py` wraps `run.py`; results in `results/COMPARISON.md`):
+
+```bash
+# hard suite: 8 questions about facts newer than the model's training data
+python3 evals/compare.py --suite hard  --skills-ref 22358f2 --label baseline
+# prefix every prompt with "Use Firecrawl to look this up on the web."
+python3 evals/compare.py --suite tasks --skills-ref 22358f2 --label told --force-firecrawl
+# block tools with --disallowedTools: built-in search only, or Firecrawl CLI only
+python3 evals/compare.py --suite hard --skills-ref NONE    --label only-native    --only-tools native
+python3 evals/compare.py --suite hard --skills-ref 22358f2 --label only-firecrawl --only-tools firecrawl
+# model judge: correctness, sourcing, faithfulness, completeness, concision -> judge.jsonl
+python3 evals/judge.py evals/results/hard-only-native evals/results/hard-only-firecrawl
 ```
 
 Options: `--trials` (default 3), `--model` (default `claude-sonnet-5-5`),

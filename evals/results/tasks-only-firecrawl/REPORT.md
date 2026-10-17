@@ -31,3 +31,53 @@ Skills `22358f2` · model `claude-sonnet-5-5` · 3 trials · max 20 turns · Fir
 | t12 |  scrape | firecrawl, firecrawl, firecrawl | `scrape` firecrawl-scrape | 3/3 |
 | t13 |  search | firecrawl, firecrawl, firecrawl | `scrape` firecrawl-scrape | 1/3 |
 | t14 |  map | firecrawl, firecrawl, firecrawl | `scrape` firecrawl-scrape | 3/3 |
+
+## Tool calls
+
+Across 42 runs. *Runs* = runs that called it at least once.
+
+**All tool calls (Claude Code tools; `Skill` = any skill load, `Bash` includes Firecrawl CLI calls)**
+
+| Tool | Calls | Runs | Calls per run |
+|---|---|---|---|
+| `Bash` | 121 | 42 | 2.88 |
+| `Skill` | 27 | 27 | 0.64 |
+| `Read` | 18 | 15 | 0.43 |
+| `Monitor` | 1 | 1 | 0.02 |
+| `ScheduleWakeup` | 1 | 1 | 0.02 |
+
+**Firecrawl skills loaded**
+
+| Tool | Calls | Runs | Calls per run |
+|---|---|---|---|
+| `firecrawl-scrape` | 13 | 13 | 0.31 |
+| `firecrawl` | 10 | 10 | 0.24 |
+| `firecrawl-search` | 4 | 4 | 0.10 |
+| `firecrawl-agent` | 0 | 0 | 0.00 |
+| `firecrawl-alexandria` | 0 | 0 | 0.00 |
+| `firecrawl-crawl` | 0 | 0 | 0.00 |
+| `firecrawl-developer-index` | 0 | 0 | 0.00 |
+| `firecrawl-download` | 0 | 0 | 0.00 |
+| `firecrawl-interact` | 0 | 0 | 0.00 |
+| `firecrawl-map` | 0 | 0 | 0.00 |
+| `firecrawl-monitor` | 0 | 0 | 0.00 |
+| `firecrawl-parse` | 0 | 0 | 0.00 |
+| `firecrawl-research-index` | 0 | 0 | 0.00 |
+
+**Firecrawl CLI commands run in Bash**
+
+| Tool | Calls | Runs | Calls per run |
+|---|---|---|---|
+| `firecrawl scrape` | 113 | 37 | 2.69 |
+| `firecrawl search` | 6 | 6 | 0.14 |
+| `firecrawl agent` | 0 | 0 | 0.00 |
+| `firecrawl alexandria` | 0 | 0 | 0.00 |
+| `firecrawl crawl` | 0 | 0 | 0.00 |
+| `firecrawl developer` | 0 | 0 | 0.00 |
+| `firecrawl download` | 0 | 0 | 0.00 |
+| `firecrawl interact` | 0 | 0 | 0.00 |
+| `firecrawl map` | 0 | 0 | 0.00 |
+| `firecrawl monitor` | 0 | 0 | 0.00 |
+| `firecrawl parse` | 0 | 0 | 0.00 |
+| `firecrawl research` | 0 | 0 | 0.00 |
+

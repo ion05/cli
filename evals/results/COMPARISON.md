@@ -26,8 +26,7 @@ Per hard question (correct out of 3, left alone / told): h01 3/3, h02 3/3, h03 3
 ## Caveats
 
 - Firecrawl rate limits showed up in 46 of the 66 told runs (three suites ran at once, 12 agents in parallel); retries inflate time.
-- `REPORT.md` for the `hard-*` runs has no per-question correct column, because `run.py report` only adds it when the suite is
-  named `tasks`. The numbers above come from `runs.jsonl`.
+- `REPORT.md` for the `hard-*` runs now has a per-question correct column (`run.py` registers the `hard` suite).
 
 # Built-in search only vs Firecrawl only
 
