@@ -1,7 +1,7 @@
 ---
 name: firecrawl-agent
 description: |
-  Collect structured records (a JSON list or table) by navigating a site or several sites: go through a directory, catalog, job board or listing and pull fields for each match. Use instead of chaining many scrapes when the pages aren't known up front. Takes minutes and costs more than scrape; for one known page, scrape it.
+  Use when you don't know which pages hold the data: give it a goal and it searches and navigates on its own, then returns structured JSON. Built for dozens of records or several sites (a directory, catalog or listing), not a handful you can get with search plus a few scrapes. Takes minutes and costs more than scrape; for a known page, scrape it.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)

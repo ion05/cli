@@ -29,3 +29,10 @@ Most remaining misses got a good answer with a cheaper tool, so "ran the expecte
 - **parse (s18):** `pdftotext` on a one-page text PDF.
 
 Next step if we want a fairer number: grade the answer (judge.py) instead of the command.
+
+## After these runs (not yet re-run)
+
+Following Firecrawl's docs ("do you know which page has the data?"): the agent description now leads
+with "you don't know which pages hold the data" and a scale cue (dozens of records), and interact says
+to scrape first and stop the session when done. Prompts s09 and s10 now ask for 30 records, and s11 is
+a login form instead of the HN "new" link. The numbers above used the old s09-s11 prompts.
