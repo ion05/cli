@@ -1,7 +1,7 @@
 ---
 name: firecrawl-crawl
 description: |
-  Bulk-extract many pages from one site or section. Use for "crawl", "everything under /docs", or content spanning linked pages.
+  Fetch many pages of one site or section in a single job: "every page under /docs", "the first N pages under a URL", summarize or collect a whole section. Use instead of mapping and then scraping pages one by one.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)

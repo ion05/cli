@@ -1,6 +1,7 @@
 ---
 name: firecrawl-developer-index
-description: Search an index of public repositories, GitHub issues, merged pull requests, repository READMEs, and curated documentation sites. Use when a programming question needs external documentation or upstream evidence.
+description: |
+  Search GitHub issues, merged pull requests, READMEs and curated docs across public repos. Use for "find issues or PRs in owner/repo about X", known bugs, error messages and library or API questions, instead of the GitHub API, gh or a web search.
 ---
 
 # Firecrawl Developer Index
