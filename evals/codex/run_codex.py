@@ -14,7 +14,8 @@ writes, so hardtools/judge_agent.py and hardtools/report.py work unchanged:
   python3 evals/hardtools/judge_agent.py evals/results/hardtools-codex-*
   python3 evals/hardtools/report.py native original mine codex-native codex-original codex-mine
 
-Needs CODEX_API_KEY (or OPENAI_API_KEY) in the environment.
+Needs a Codex sign-in (`codex login`, or `codex login --device-auth` on a
+headless box; copied into each run's home) or CODEX_API_KEY / OPENAI_API_KEY.
 """
 import argparse, concurrent.futures as cf, datetime, json, os, shutil, subprocess, sys, tempfile, time
 from pathlib import Path
@@ -29,6 +30,7 @@ PASS_ENV = [k for k in R.PASS_ENV if not k.startswith(("ANTHROPIC", "CLAUDE"))] 
     "CODEX_API_KEY", "OPENAI_API_KEY", "OPENAI_BASE_URL", "CODEX_CA_CERTIFICATE"]
 # USD per 1M tokens (input, cached input, output); override with --price
 PRICES = {"default": (1.25, 0.125, 10.0)}
+AUTH = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")) / "auth.json"
 BLOCKED = "#!/bin/sh\necho 'firecrawl is not available in this run' >&2\nexit 127\n"
 
 
@@ -88,6 +90,8 @@ def run_one(case, trial, skills_src, block_fc, outdir, a, price):
         shutil.copytree(skills_src, home / "skills")
     else:
         home.mkdir()
+    if AUTH.exists():  # ChatGPT sign-in from `codex login --device-auth`
+        shutil.copy(AUTH, home / "auth.json")
     env = {k: os.environ[k] for k in PASS_ENV if k in os.environ}
     env.setdefault("CODEX_CA_CERTIFICATE", env.get("SSL_CERT_FILE", ""))
     env["CODEX_HOME"] = str(home)
@@ -131,8 +135,8 @@ def main():
     ap.add_argument("--tmp", default=str(Path.home() / ".fceval"), help="parent dir for per-run CODEX_HOME (Codex refuses helpers under /tmp)")
     ap.add_argument("--only")
     a = ap.parse_args()
-    if not (os.environ.get("CODEX_API_KEY") or os.environ.get("OPENAI_API_KEY")):
-        sys.exit("set CODEX_API_KEY or OPENAI_API_KEY")
+    if not (AUTH.exists() or os.environ.get("CODEX_API_KEY") or os.environ.get("OPENAI_API_KEY")):
+        sys.exit("run `codex login` (or `codex login --device-auth`) or set CODEX_API_KEY")
     ref = a.skills_ref or ARMS[a.arm]
     if not ref:
         sys.exit(f"--skills-ref is required for --arm {a.arm}")
