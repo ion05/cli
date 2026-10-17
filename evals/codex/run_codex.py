@@ -17,7 +17,7 @@ writes, so hardtools/judge_agent.py and hardtools/report.py work unchanged:
 Needs a Codex sign-in (`codex login`, or `codex login --device-auth` on a
 headless box; copied into each run's home) or CODEX_API_KEY / OPENAI_API_KEY.
 """
-import argparse, concurrent.futures as cf, datetime, json, os, shutil, subprocess, sys, tempfile, time
+import argparse, concurrent.futures as cf, datetime, json, os, re, shlex, shutil, subprocess, sys, tempfile, time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -32,6 +32,21 @@ PASS_ENV = [k for k in R.PASS_ENV if not k.startswith(("ANTHROPIC", "CLAUDE"))] 
 PRICES = {"default": (1.25, 0.125, 10.0)}
 AUTH = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")) / "auth.json"
 BLOCKED = "#!/bin/sh\necho 'firecrawl is not available in this run' >&2\nexit 127\n"
+
+
+SKILL_PATH = re.compile(r"/skills/([\w-]+)/SKILL\.md")
+NPX = re.compile(r"\bnpx\s+(?:--yes|-y)\s+firecrawl-cli(?:@\S+)?")
+
+
+def unwrap(cmd):
+    """Codex reports `/bin/bash -lc '<script>'`; score the script, with `npx --yes firecrawl-cli` read as `firecrawl`."""
+    try:
+        parts = shlex.split(cmd)
+    except ValueError:
+        parts = []
+    if len(parts) == 3 and parts[0].endswith("sh") and parts[1] in ("-lc", "-c"):
+        cmd = parts[2]
+    return NPX.sub("firecrawl", cmd)
 
 
 def score(stream, price):
@@ -60,10 +75,10 @@ def score(stream, price):
             elif kind == "mcp_tool_call":
                 tools.append(f"mcp:{it.get('server')}.{it.get('tool')}")
             elif kind == "command_execution":
-                c = it.get("command") or ""
+                c = unwrap(it.get("command") or "")
                 tools.append("shell")
                 # Codex has no Skill tool: it reads SKILL.md with the shell
-                skills += [p.split("/")[-2] for p in c.split() if p.endswith("/SKILL.md") and "/skills/" in p]
+                skills += SKILL_PATH.findall(c)
                 m = [x.split()[-1].lstrip("-") if x else "(bare)" for x in R.FC_CMD.findall(c)]
                 api = [b if a == "search" and b in ("developer", "research", "gov") else a for a, b in R.FC_API.findall(c)]
                 if m or api:
