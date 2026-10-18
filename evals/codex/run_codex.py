@@ -96,6 +96,22 @@ def score(stream, price):
             "result_subtype": "error" if failed else "success", "error": failed, "answer": answer}
 
 
+def keep_outputs(work, answer, dest, max_bytes=2_000_000):
+    """Codex often writes long tables to files and links them from its answer; keep them for the judge.
+    Keeps everything it wrote except the .firecrawl/ scrape cache, plus cache files the answer names."""
+    kept = []
+    for f in sorted(work.rglob("*")):
+        rel = f.relative_to(work).as_posix()
+        if not f.is_file() or f.stat().st_size > max_bytes or "node_modules/" in rel:
+            continue
+        if rel.startswith(".firecrawl/") and rel not in answer and f.name not in answer:
+            continue
+        (dest / rel).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(f, dest / rel)
+        kept.append(rel)
+    return kept
+
+
 def run_one(case, trial, skills_src, block_fc, outdir, a, price):
     tag = f"{case['id']}-t{trial}"
     tmp = Path(tempfile.mkdtemp(prefix=f"fceval-codex-{tag}-", dir=a.tmp))
@@ -132,6 +148,7 @@ def run_one(case, trial, skills_src, block_fc, outdir, a, price):
     (outdir / "transcripts" / f"{tag}.jsonl").write_text(out)
     rec = score(out, price)
     rec.update(id=case["id"], trial=trial, duration_s=round(time.time() - t0, 1), timed_out=timed_out, stderr=err[-500:])
+    rec["outputs"] = keep_outputs(work, rec["answer"], outdir / "outputs" / tag)
     shutil.rmtree(tmp, ignore_errors=True)
     return rec
 
