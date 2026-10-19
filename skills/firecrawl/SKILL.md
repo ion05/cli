@@ -30,9 +30,10 @@ Follow this escalation pattern:
 1. **Search** - Start with the actual question: `developer` for code questions, `research` for papers, otherwise `search`. Find web sources and relevant structured-data tools through semantic and domain matching.
 2. **Inspect + Scrape** - For a tool match, use `list <provider> <capability> --pretty` if its contract is missing, then execute with `scrape <provider/capability> --options '<JSON>'`. For a URL, scrape its content directly.
 3. **Map + Scrape** - Large site or need a specific subpage. Use `map --search` to find the right URL, then scrape it.
-4. **Crawl** - Need bulk content from an entire site section (e.g., all /docs/).
-5. **Monitor** - Need recurring checks or ongoing alerts. Prefer setting a monitor with `--page` plus `--goal` instead of doing repeated one-off scrapes.
-6. **Interact** - Scrape first, then interact with the page (pagination, modals, form submissions, multi-step navigation).
+4. **Crawl** - More than 2-3 pages from one site or section (all of /docs, every changelog entry, a whole API reference): one `crawl --include-paths <section> --limit N --wait`, not a scrape loop.
+5. **Agent** - A list of records spread over pages you don't know yet (every company/faculty member/vendor matching X, the same facts for 10+ sites): one `agent "<goal>" --schema '<json>'` job, not search plus a scrape per site. Start it without `--wait`, keep working, then poll its job ID.
+6. **Monitor** - Need recurring checks or ongoing alerts. Prefer setting a monitor with `--page` plus `--goal` instead of doing repeated one-off scrapes.
+7. **Interact** - The data appears only after you act on the page (a search box or form, filters, tabs, "load more", pagination): scrape first, then interact, instead of guessing URL parameters.
 
 | Need                        | Command               | When                                                                                                                                                                                                                                                                                                                                                    |
 | --------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
