@@ -25,15 +25,16 @@ Use Firecrawl for anything that needs the internet (searching, reading pages, UR
 
 For structured datasets, first check for a suitable workflow or data provider using the [search skill](../firecrawl-search/SKILL.md). Read a known page directly; reuse a selected contract instead of repeating discovery.
 
-Follow this escalation pattern:
+## Pick the command by the shape of the task
 
-1. **Search** - Start with the actual question: `developer` for code questions, `research` for papers, otherwise `search`. Find web sources and relevant structured-data tools through semantic and domain matching.
-2. **Inspect + Scrape** - For a tool match, use `list <provider> <capability> --pretty` if its contract is missing, then execute with `scrape <provider/capability> --options '<JSON>'`. For a URL, scrape its content directly.
-3. **Map + Scrape** - Large site or need a specific subpage. Use `map --search` to find the right URL, then scrape it.
-4. **Crawl** - More than 2-3 pages from one site or section (all of /docs, every changelog entry, a whole API reference): one `crawl --include-paths <section> --limit N --wait`, not a scrape loop.
-5. **Agent** - A list of records spread over pages you don't know yet (every company/faculty member/vendor matching X, the same facts for 10+ sites): one `agent "<goal>" --schema '<json>'` job, not search plus a scrape per site. Start it without `--wait`, keep working, then poll its job ID.
-6. **Monitor** - Need recurring checks or ongoing alerts. Prefer setting a monitor with `--page` plus `--goal` instead of doing repeated one-off scrapes.
-7. **Interact** - The data appears only after you act on the page (a search box or form, filters, tabs, "load more", pagination): scrape first, then interact, instead of guessing URL parameters.
+- Local file (PDF, DOCX, XLSX, PPTX) → `parse`.
+- No URL yet → `search` (`developer` for repos, issues and PRs; `research` for papers; `gov` for US law). When the user wants sources, links, "current" data or a list of N records, fetch them even if you think you know the answer.
+- One URL, or several URLs you already have → `scrape`. Pass them all to one call (`firecrawl scrape <url1> <url2> …`, saved to `.firecrawl/`) instead of a `for`/`xargs` loop.
+- Known site, unknown page → `map <site> --search "<topic>"`, then scrape the match. Skip map only if you are sure of the URL.
+- Every page under a path whose URLs you don't have ("all of /docs", "the whole API reference", "the first N pages under X") → one `crawl <url> --include-paths <prefix> --limit N --wait`. If you already hold the URL list, that is one multi-URL scrape, not a crawl.
+- The same facts for many records spread over pages you don't know ("every X that…", "20 companies/faculty/vendors matching…", a directory or listing) → one `agent "<goal>" --schema '<json>' --max-credits N` job; start it without `--wait`, keep working, poll its job ID. For a handful of named sites whose pages you can find, scrape them instead. One agent job per task: if it fails or hits the cap, continue it once with `--thread`, then fall back to search + scrape. Never run agent in a loop.
+- Data appears only after acting on the page (a form or search box, login, filters, tabs, "load more") → scrape first; if the content isn't there, `interact` a few steps, then `interact stop`. Check for a URL parameter, CSV or API on the same site first.
+- Recurring check or alert → `monitor`. Save a site as local files → `x download`.
 
 | Need                        | Command               | When                                                                                                                                                                                                                                                                                                                                                    |
 | --------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
