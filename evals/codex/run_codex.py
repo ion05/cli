@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-"""Run the hardtools suite with OpenAI's Codex CLI as the agent instead of Claude Code.
+"""Run an eval suite with OpenAI's Codex CLI as the agent instead of Claude Code.
 
   python3 evals/codex/run_codex.py --arm native              # no skills, Firecrawl CLI blocked, key removed
   python3 evals/codex/run_codex.py --arm original            # upstream skills 22358f2
   python3 evals/codex/run_codex.py --arm mine --skills-ref a3648a8
+
+  # the run.py suites (trigger, tasks, hard, ...): same prompts, fixtures and regex grading as run.py
+  python3 evals/codex/run_codex.py --suite trigger --arm original --trials 3
+  python3 evals/codex/run_codex.py --suite trigger --arm mine --skills-ref 3db3d63 --label codex-desc-v1 --trials 3
+  python3 evals/run.py report evals/results/trigger-codex-original
+  python3 evals/judge.py evals/results/hard-codex-original
 
 Each run gets a fresh CODEX_HOME whose skills/ holds only the skills under test
 (Codex loads $CODEX_HOME/skills/*/SKILL.md, like ~/.claude/skills). Codex's own
@@ -25,6 +31,7 @@ sys.path.insert(0, str(HERE.parent))
 import run as R
 
 CASES_FILE = HERE.parent / "hardtools" / "tasks.jsonl"
+R.SUITES["hard"] = R.ROOT / "tasks" / "hard.jsonl"
 ARMS = {"native": "NONE", "original": "22358f2", "mine": None}
 PASS_ENV = [k for k in R.PASS_ENV if not k.startswith(("ANTHROPIC", "CLAUDE"))] + [
     "CODEX_API_KEY", "OPENAI_API_KEY", "OPENAI_BASE_URL", "CODEX_CA_CERTIFICATE"]
@@ -49,7 +56,7 @@ def unwrap(cmd):
     return NPX.sub("firecrawl", cmd)
 
 
-def score(stream, price):
+def score(stream, price, skill_counts=False):
     tools, fc_cmds, fc_api, skills, actions, answer = [], [], [], [], [], ""
     usage, turns, failed = {"input_tokens": 0, "cached_input_tokens": 0, "output_tokens": 0}, 0, None
     for line in stream.splitlines():
@@ -78,7 +85,10 @@ def score(stream, price):
                 c = unwrap(it.get("command") or "")
                 tools.append("shell")
                 # Codex has no Skill tool: it reads SKILL.md with the shell
-                skills += SKILL_PATH.findall(c)
+                read = SKILL_PATH.findall(c)
+                skills += read
+                if skill_counts and any(x.startswith("firecrawl") for x in read):
+                    actions.append("firecrawl")  # like a Skill load in run.py: it chose Firecrawl
                 m = [x.split()[-1].lstrip("-") if x else "(bare)" for x in R.FC_CMD.findall(c)]
                 api = [b if a == "search" and b in ("developer", "research", "gov") else a for a, b in R.FC_API.findall(c)]
                 if m or api:
@@ -112,11 +122,14 @@ def keep_outputs(work, answer, dest, max_bytes=2_000_000):
     return kept
 
 
-def run_one(case, trial, skills_src, block_fc, outdir, a, price):
+def run_one(case, trial, skills_src, block_fc, outdir, a, price, fixture_dirs=()):
     tag = f"{case['id']}-t{trial}"
     tmp = Path(tempfile.mkdtemp(prefix=f"fceval-codex-{tag}-", dir=a.tmp))
     home, work, shim = tmp / "home", tmp / "work", tmp / "bin"
     work.mkdir(); shim.mkdir()
+    for fd in fixture_dirs:
+        for f in fd.iterdir():
+            shutil.copy(f, work / f.name)
     if skills_src:
         shutil.copytree(skills_src, home / "skills")
     else:
@@ -146,7 +159,12 @@ def run_one(case, trial, skills_src, block_fc, outdir, a, price):
         out = e.stdout.decode() if isinstance(e.stdout, bytes) else (e.stdout or "")
         err, timed_out = "", True
     (outdir / "transcripts" / f"{tag}.jsonl").write_text(out)
-    rec = score(out, price)
+    rec = score(out, price, skill_counts=a.suite != "hardtools")
+    if a.suite != "hardtools":  # same grading as run.py
+        if "grade" in case:
+            rec["correct"] = bool(re.search(case["grade"], rec["answer"], re.I))
+        elif "grade_all" in case:
+            rec["correct"] = all(re.search(g, rec["answer"], re.I) for g in case["grade_all"])
     rec.update(id=case["id"], trial=trial, duration_s=round(time.time() - t0, 1), timed_out=timed_out, stderr=err[-500:])
     rec["outputs"] = keep_outputs(work, rec["answer"], outdir / "outputs" / tag)
     shutil.rmtree(tmp, ignore_errors=True)
@@ -156,6 +174,7 @@ def run_one(case, trial, skills_src, block_fc, outdir, a, price):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--arm", choices=sorted(ARMS), required=True)
+    ap.add_argument("--suite", default="hardtools", choices=["hardtools", *R.SUITES])
     ap.add_argument("--skills-ref", help="skills for the mine arm (a git ref)")
     ap.add_argument("--label")
     ap.add_argument("--model", help="Codex model; default is whatever the installed Codex CLI defaults to")
@@ -175,19 +194,26 @@ def main():
     price = tuple(float(x) for x in a.price.split(","))
     Path(a.tmp).mkdir(parents=True, exist_ok=True)
 
-    cases = [json.loads(l) for l in CASES_FILE.read_text().splitlines() if l.strip()]
+    if a.suite == "hardtools":
+        cases = [json.loads(l) for l in CASES_FILE.read_text().splitlines() if l.strip()]
+        fixture_dirs = []
+    else:
+        cases = R.load_suite(a.suite)
+        fixture_dirs = [d for d in (R.ROOT / "fixtures", R.SUITES[a.suite].parent / "fixtures") if d.is_dir()]
     if a.only:
         cases = [c for c in cases if c["id"] in set(a.only.split(","))]
-    outdir = R.ROOT / "results" / f"hardtools-{a.label or 'codex-' + a.arm}"
+    outdir = R.ROOT / "results" / f"{a.suite}-{a.label or 'codex-' + a.arm}"
     (outdir / "transcripts").mkdir(parents=True, exist_ok=True)
     skills_src = None
     if ref != "NONE":
         skills_src = Path(tempfile.mkdtemp(prefix="fceval-skills-")) / "skills"
         R.export_skills(ref, skills_src)
-    meta = dict(suite="hardtools", agent="codex", label=outdir.name.removeprefix("hardtools-"), skills_ref=ref,
+    version = subprocess.run(["codex", "--version"], capture_output=True, text=True).stdout.strip()
+    meta = dict(suite=a.suite, agent="codex", label=outdir.name.removeprefix(f"{a.suite}-"), skills_ref=ref,
                 model=a.model or "(codex default)", effort=a.effort, price_per_mtok=price, trials=a.trials,
                 started=datetime.datetime.utcnow().isoformat() + "Z", firecrawl_key=a.arm != "native",
-                codex_version=subprocess.run(["codex", "--version"], capture_output=True, text=True).stdout.strip())
+                codex_version=version,
+                max_turns="n/a", claude_version=version)  # run.py report reads these two
     (outdir / "meta.json").write_text(json.dumps(meta, indent=2))
 
     rows_path = outdir / "runs.jsonl"
@@ -196,7 +222,7 @@ def main():
     jobs = [(c, t) for t in range(1, a.trials + 1) for c in cases if (c["id"], t) not in done]
     print(f"{len(jobs)} runs to do ({len(done)} already done) -> {outdir}", flush=True)
     with cf.ThreadPoolExecutor(a.concurrency) as ex, rows_path.open("a") as fh:
-        futs = {ex.submit(run_one, c, t, skills_src, a.arm == "native", outdir, a, price): (c, t) for c, t in jobs}
+        futs = {ex.submit(run_one, c, t, skills_src, a.arm == "native", outdir, a, price, fixture_dirs): (c, t) for c, t in jobs}
         for i, f in enumerate(cf.as_completed(futs), 1):
             c, t = futs[f]
             try:
@@ -205,7 +231,9 @@ def main():
                 r = dict(id=c["id"], trial=t, error=repr(e), first_web="error")
             fh.write(json.dumps(r) + "\n"); fh.flush()
             print(f"[{i}/{len(jobs)}] {c['id']} t{t}: fc={r.get('fc_cmds')} skills={r.get('skills')} "
-                  f"tools={r.get('n_tools')} ${r.get('cost_usd')} err={r.get('error')}", flush=True)
+                  f"tools={r.get('n_tools')} first={r.get('first_web')} correct={r.get('correct')} ${r.get('cost_usd')} err={r.get('error')}", flush=True)
+    if a.suite != "hardtools":
+        R.cmd_report(argparse.Namespace(dir=str(outdir)))
 
 
 if __name__ == "__main__":
