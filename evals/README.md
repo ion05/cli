@@ -1,13 +1,15 @@
 # Firecrawl skill evals
 
 Measures how a coding agent (Claude Code, headless) uses the Firecrawl CLI skills
-for web research. Four suites:
+for web research. Six suites:
 
 | Suite | File | What it measures |
 |---|---|---|
 | `trigger` | `trigger/prompts.jsonl` | Does the agent reach for Firecrawl when it should, and leave it alone when it shouldn't? 24 web-research prompts (`use`), 10 non-web near-misses (`avoid`), 4 simple fetches where a native fetch is fine (`either`). |
 | `tasks` | `tasks/tasks.jsonl` | Does it get the right answer? 14 research questions with stable, regex-graded answers. Also records Firecrawl use, tool calls, cost and time. |
 | `hard` | `tasks/hard.jsonl` | 8 regex-graded questions about facts newer than the model's training data, so it has to go to the web. Run through `compare.py`. |
+| `natural` | `tasks/natural.jsonl` | 38 questions phrased the way people really ask (no source or tool named): fresh versions, 2026 news, product pricing, everyday docs, reading pages. Answers checked on 2026-10-17. `python3 evals/run.py run --suite natural ...`, then `judge.py` and `table.py` for a side-by-side table (`results/NATURAL.md`). |
+| `complex` | `tasks/complex.jsonl` | 24 questions on pages built-in tools find hard: bot walls, JavaScript-rendered job boards, a pricing slider, multi-page and multi-site comparisons, plus 4 plain-page controls. Answers checked on 2026-10-17. Results in `results/COMPLEX.md`. |
 | `subtools` | `subtools/prompts.jsonl` | Once the agent is using Firecrawl, does it pick the right command? 24 prompts that say "use Firecrawl" but not which command, 2 per subtool (search, scrape, map, crawl, agent, interact, monitor, download, parse, research, developer, alexandria). Needs `FIRECRAWL_API_KEY`; the monitor prompts create real monitors, so delete them afterwards (`firecrawl monitor list`). |
 
 Each trial runs in a fresh temp dir with a fresh `CLAUDE_CONFIG_DIR` whose

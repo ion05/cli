@@ -15,10 +15,10 @@ import run as R
 
 R.SUITES["hard"] = R.ROOT / "tasks" / "hard.jsonl"
 MODEL = os.environ.get("JUDGE_MODEL", "claude-sonnet-5-5")
-RUBRIC = """You are grading a research assistant's answer. Today is 2026-10-16.
+RUBRIC = """You are grading a research assistant's answer. Today is {date}.
 
 Question: {q}
-Reference answer (checked by hand on 2026-10-16): {ref}
+Reference answer (checked by hand on {date}): {ref}
 Assistant's final answer:
 <answer>
 {ans}
@@ -34,7 +34,7 @@ Score it and reply with only a JSON object, no prose:
 
 
 def judge(case, row):
-    prompt = RUBRIC.format(q=case["prompt"], ref=case["answer"], ans=row.get("answer") or "(no answer)")
+    prompt = RUBRIC.format(date=case.get("checked", "2026-10-16"), q=case["prompt"], ref=case["answer"], ans=row.get("answer") or "(no answer)")
     cfg = tempfile.mkdtemp(prefix="fceval-judge-")
     env = {k: os.environ[k] for k in R.PASS_ENV if k in os.environ}
     env["CLAUDE_CONFIG_DIR"] = cfg

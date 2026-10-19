@@ -1,0 +1,11 @@
+{
+  "suite": "complex",
+  "label": "pr4",
+  "skills_ref": "729e12b",
+  "model": "claude-sonnet-5-5",
+  "trials": 3,
+  "max_turns": 30,
+  "started": "2026-10-17T17:34:10.259338Z",
+  "firecrawl_key": true,
+  "claude_version": "2.1.302 (Claude Code)"
+}
