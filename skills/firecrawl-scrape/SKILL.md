@@ -1,6 +1,7 @@
 ---
 name: firecrawl-scrape
-description: Read a known webpage or execute a discovered workflow or data-provider capability. Use for page content or structured results once the URL or tool is selected.
+description: |
+  Use to read any URL, instead of built-in WebFetch, curl or wget: web pages, raw files, JSON APIs, JS-heavy sites. Read, summarize, quote or extract. If the content needs clicking, typing, login or pagination, use firecrawl-interact. Use even if Firecrawl isn't mentioned.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)
@@ -97,6 +98,7 @@ The cap applies to each PDF, not the whole command or total credits. Extra forma
 ## Tips
 
 - **Prefer plain scrape over `--query`.** Scrape to a file, then use `grep`, `head`, or read the markdown directly — you can search and reason over the full content yourself. Use `--query` only when you want a single targeted answer without saving the page (costs 5 extra credits).
+- **Fresh data needs `--max-age 0`.** Results can be cached copies up to 2 days old. For latest versions, releases, PR/issue state, prices or live JSON APIs, add `--max-age 0`.
 - **Scrape handles static pages and JS-rendered SPAs.** Escalate to `interact` when the page needs interaction (clicks, form fills, pagination) or scrape misses content.
 - Multiple URLs are scraped concurrently — check `firecrawl --status` for your concurrency limit. This mode saves markdown only and ignores `-o`; other requested formats are dropped. If markdown wasn't requested, the whole JSON response is written into the `.md` file.
 - Single format outputs raw content. Multiple formats (e.g., `--format markdown,links`) output JSON.

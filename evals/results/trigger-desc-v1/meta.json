@@ -1,0 +1,11 @@
+{
+  "suite": "trigger",
+  "label": "desc-v1",
+  "skills_ref": "WORKTREE",
+  "model": "claude-sonnet-5-5",
+  "trials": 3,
+  "max_turns": 8,
+  "started": "2026-10-17T00:50:58.125058Z",
+  "firecrawl_key": false,
+  "claude_version": "2.1.302 (Claude Code)"
+}
