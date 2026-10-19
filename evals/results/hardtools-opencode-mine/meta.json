@@ -1,0 +1,11 @@
+{
+  "suite": "hardtools",
+  "label": "opencode-mine",
+  "skills_ref": "a3648a8",
+  "model": "ollama/qwen3-8b-64k",
+  "trials": 1,
+  "max_turns": 80,
+  "started": "2026-10-17T21:45:58.555073Z",
+  "firecrawl_key": true,
+  "claude_version": "opencode v2.0.32"
+}

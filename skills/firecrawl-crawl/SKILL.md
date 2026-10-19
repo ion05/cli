@@ -1,7 +1,7 @@
 ---
 name: firecrawl-crawl
 description: |
-  Bulk-extract many pages from one site or section. Use for "crawl", "everything under /docs", or content spanning linked pages.
+  Fetch many pages of one site or section in a single job: "every page under /docs", "the first N pages under a URL", summarize or collect a whole section. Use instead of several scrape calls, or map and then scrape, whenever you need more than a couple of pages from the same site.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)
@@ -33,6 +33,7 @@ Run `firecrawl crawl --help` for the full option list.
 ## Tips
 
 - Use `--wait` when you need the results immediately. It has no default timeout; use `--timeout <seconds>` to bound polling. Without `--wait`, crawl returns a job ID for async polling.
+- **One crawl, not a scrape loop.** If you're about to scrape a third page from the same site or section, crawl it instead with `--limit`.
 - **Scope crawls with `--include-paths`** whenever the request names a section — crawl only the pages you need.
 - Crawl consumes credits per page. Check `firecrawl credit-usage` before large crawls (`credit-usage` requires authentication).
 

@@ -1,7 +1,7 @@
 ---
 name: firecrawl-download
 description: |
-  Save a site or section as local files (markdown, screenshots). Use for "download the site", offline docs, or a local copy for reference.
+  Save pages of a site or section as local files (markdown, screenshots): "download the docs", an offline or local copy, "save the first N pages into this folder". Use instead of wget, curl -O or a scrape loop. For reading many pages without saving files, use crawl.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)
