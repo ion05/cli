@@ -2,7 +2,7 @@
 {"id":"h02","intent":"search","prompt":"What is the newest Node.js LTS release right now? Give the exact version number (x.y.z).","answer":"24.22.0","grade":"24\\.22\\.0"}
 {"id":"h03","intent":"search","prompt":"What is the latest published version of the firecrawl-cli package on npm?","answer":"1.26.12","grade":"1\\.26\\.12"}
 {"id":"h04","intent":"search","prompt":"What is the latest published version of Claude Code (the @anthropic-ai/claude-code npm package)?","answer":"2.1.303","grade":"2\\.1\\.303"}
-{"id":"h05","intent":"scrape","prompt":"What is the number and title of the most recently merged pull request in the firecrawl/cli GitHub repository?","answer":"#321 feat(search): always include Alexandria in authenticated searches","grade_all":["321","Alexandria"]}
+{"id":"h05","intent":"scrape","prompt":"What is the number and title of the most recently merged pull request in the firecrawl/cli GitHub repository?","answer":"#335 fix(skills): avoid unsupported global installation targets","grade_all":["335","unsupported global install"]}
 {"id":"h06","intent":"search","prompt":"How much did Firecrawl raise in its Series B, who led the round, and what product did it announce alongside it?","answer":"$75M, Smash Capital, Alexandria","grade_all":["75\\s?M|75 million","Smash Capital","Alexandria"]}
 {"id":"h07","intent":"scrape","prompt":"How many credits per month does Firecrawl's Hobby plan include?","answer":"5,000","grade":"5,?000"}
 {"id":"h08","intent":"scrape","prompt":"According to the Firecrawl docs, what is the default maxAge for cached scrapes?","answer":"172800000 ms (2 days)","grade":"172,?800,?000|2 days|48 hours|two days"}
