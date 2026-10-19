@@ -45,4 +45,4 @@ Hard answers re-checked on the day: firecrawl-cli 1.26.12, Claude Code 2.1.303, 
   copies (firecrawl-cli 1.26.10, PR #320). With the final skills every h03/h05 run used `--max-age 0` and got 1.26.12 and #335.
 - **Codex also routes simple fetches through Firecrawl** (raw file, JSON API, status check): 10/12 original, 12/12 final.
   Allowed by the suite, but more than those jobs need.
-- t13 misses: Codex quotes the page's "Erik S." byline instead of "Erik Schluntz", so the regex fails; the judge accepted it in 4 of those 5 runs.
+- t13 misses: Codex quotes the page's "Erik S." byline instead of "Erik Schluntz", so the regex fails; the judge accepted it in 3 of those 5 runs.
