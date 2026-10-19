@@ -18,7 +18,8 @@ There is **no fixed recipe**. Read the question, decide what kind it is, and cho
   Ranked results over the whole index. Each carries `id` (`issue:owner/repo#123`), `url`, and the **matched passages in markdown**, so tables and code blocks survive. The artifact kind is the `id` prefix: `doc:`, `issue:`, `pull_request:`, or `readme:`.
   The default first move for a developer question. It is the only surface that returns the passages, which is what lets you answer instead of pointing at a page.
   `k` / `--limit` is 1–100 and defaults to 10. `skills="only"` (HTTP/MCP only) restricts the search to agent-skill files.
-  Keyless; send `Authorization: Bearer $FIRECRAWL_API_KEY` for higher rate limits.
+  Keyless calls hit a rate limit after a few requests: with `curl`, always send `-H "Authorization: Bearer $FIRECRAWL_API_KEY"` when the key is set (the CLI sends it for you).
+  The index can lag GitHub by days. For current state (the latest merged PR, whether an issue is still open), scrape the GitHub page with `--max-age 0`.
 
 - MCP: **`firecrawl_search(query, categories: ["developer"])`**
   CLI: **`firecrawl search <query> --categories developer`**
