@@ -1,0 +1,24 @@
+{"id": "s01", "expect": ["search"], "intent": "search", "prompt": "Find out what the latest stable release of Bun is and its release date."}
+{"id": "s02", "expect": ["search"], "intent": "search", "prompt": "Find three recent blog posts comparing Postgres and MySQL performance and list their URLs."}
+{"id": "s03", "expect": ["scrape"], "intent": "scrape", "prompt": "Read https://docs.firecrawl.dev/introduction and give me a 3 bullet summary."}
+{"id": "s04", "expect": ["scrape"], "intent": "scrape", "prompt": "Get the contents of https://www.python.org/downloads/ and tell me the newest Python version listed."}
+{"id": "s05", "expect": ["map"], "intent": "map", "prompt": "List the URLs on docs.firecrawl.dev that are about webhooks."}
+{"id": "s06", "expect": ["map"], "intent": "map", "prompt": "Find the page on https://supabase.com/docs that documents Row Level Security and give me its URL."}
+{"id": "s07", "expect": ["crawl"], "intent": "crawl", "prompt": "Pull every page under https://docs.firecrawl.dev/features (at most 10 pages) and give me a one-line summary of each."}
+{"id": "s08", "expect": ["crawl"], "intent": "crawl", "prompt": "Collect the content of the first 8 pages under https://docs.astral.sh/uv/guides/ and tell me which guides exist."}
+{"id": "s09", "expect": ["agent"], "intent": "agent", "prompt": "Find 30 companies that have publicly said they use Rust in production, with the company name, what they use it for and a source link, as a JSON list.", "note": "Agent case: unknown pages across many sites, dozens of records. Replaces the told-suite pricing prompt (one known page, where scrape is right)."}
+{"id": "s10", "expect": ["agent"], "intent": "agent", "prompt": "Go through the Y Combinator company directory and find 30 current YC companies building developer tools for AI agents, with their websites, as a JSON list."}
+{"id": "s11", "expect": ["interact"], "intent": "interact", "prompt": "Log in to https://the-internet.herokuapp.com/login with username tomsmith and password SuperSecretPassword! and tell me the message shown after login.", "note": "Login form on a public test site. Replaces the HN 'new' link prompt, which agents answered by fetching /newest directly."}
+{"id": "s12", "expect": ["interact"], "intent": "interact", "prompt": "Go to https://www.wikipedia.org, type 'Firecrawl' into the search box, submit it, and tell me which page you land on."}
+{"id": "s13", "expect": ["monitor"], "intent": "monitor", "prompt": "Watch https://example.com and alert me when its content changes. Check once a day.", "accept_skill": ["firecrawl-monitor"]}
+{"id": "s14", "expect": ["monitor"], "intent": "monitor", "prompt": "Set up a weekly check on https://www.iana.org/help/example-domains so I find out if the page changes.", "accept_skill": ["firecrawl-monitor"]}
+{"id": "s15", "expect": ["download"], "intent": "download", "prompt": "Save https://docs.firecrawl.dev/sdks as local markdown files so I can read them offline (at most 5 pages)."}
+{"id": "s16", "expect": ["download"], "intent": "download", "prompt": "Download a local copy of the first 5 pages of https://docs.astral.sh/ruff/ into this folder."}
+{"id": "s17", "expect": ["parse"], "intent": "parse", "prompt": "Turn the local file invoice.pdf into markdown and tell me the total amount due."}
+{"id": "s18", "expect": ["parse"], "intent": "parse", "prompt": "Extract the text from ./invoice.pdf and tell me who the invoice is billed to."}
+{"id": "s19", "expect": ["research"], "intent": "research", "prompt": "Find recent research papers on GLP-1 receptor agonists and kidney outcomes. List 3 with titles."}
+{"id": "s20", "expect": ["research"], "intent": "research", "prompt": "Find arXiv papers on speculative decoding for LLM inference. Give me 3 titles."}
+{"id": "s21", "expect": ["developer"], "intent": "developer", "prompt": "Find open GitHub issues in the vercel/next.js repo about turbopack memory leaks. List 3."}
+{"id": "s22", "expect": ["developer"], "intent": "developer", "prompt": "Find merged pull requests in astral-sh/uv that added support for workspaces. Give me 2 links."}
+{"id": "s23", "expect": ["alexandria", "find-tools", "list", "list-tools"], "intent": "alexandria", "prompt": "Get structured data on the current top 5 stories on Hacker News (title, points, url) from a ready-made data source rather than scraping the page."}
+{"id": "s24", "expect": ["alexandria", "find-tools", "list", "list-tools"], "intent": "alexandria", "prompt": "Find a ready-made data API or workflow for GitHub repository stats and use it to get the star count of firecrawl/firecrawl."}

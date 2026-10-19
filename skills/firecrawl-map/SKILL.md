@@ -1,7 +1,7 @@
 ---
 name: firecrawl-map
 description: |
-  Discover and list a site's URLs, with search filtering. Use for "map the site" or "find the URL for" requests — when the user knows the site but not the exact page, or wants site structure.
+  Find which page on a known site covers a topic, or list a site's URLs: "find the page on X about Y", "which URL documents Z", "what pages are under /docs". Run `map <url> --search "<topic>"`, then scrape the top match, instead of guessing a URL or running a web search.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)

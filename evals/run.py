@@ -15,7 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 SUITES = {"trigger": ROOT / "trigger" / "prompts.jsonl", "tasks": ROOT / "tasks" / "tasks.jsonl",
-          "subtools": ROOT / "subtools" / "prompts.jsonl", "hard": ROOT / "tasks" / "hard.jsonl"}
+          "subtools": ROOT / "subtools" / "prompts.jsonl",
+          "subtools-plain": ROOT / "subtools" / "plain.jsonl", "hard": ROOT / "tasks" / "hard.jsonl"}
 # Only what the child needs to reach the model API; everything else from the
 # parent session (hooks, synced skills, MCP servers) stays out.
 PASS_ENV = ["PATH", "HOME", "ANTHROPIC_BASE_URL", "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN",
@@ -78,7 +79,7 @@ def score(case, stream):
             events.append(json.loads(line))
         except json.JSONDecodeError:
             pass
-    actions, skills, fc_cmds, fc_api, tools = [], [], [], [], []
+    actions, skills, fc_cmds, fc_api, tools, other = [], [], [], [], [], []
     result = {}
     for e in events:
         if e.get("type") == "assistant":
@@ -94,6 +95,7 @@ def score(case, stream):
                         actions.append("firecrawl")
                 elif name in ("WebSearch", "WebFetch"):
                     actions.append("native")
+                    other.append(name)
                 elif name == "Bash":
                     c_ = inp.get("command", "")
                     # `firecrawl x download` counts as `download`, `firecrawl --status` as `status`
@@ -105,6 +107,7 @@ def score(case, stream):
                         actions.append("firecrawl")
                     elif OTHER_WEB.search(c_):
                         actions.append("other-shell")
+                        other.append(OTHER_WEB.search(c_).group(1).split()[0])
         elif e.get("type") == "result":
             result = e
     answer = result.get("result") or ""
@@ -112,7 +115,7 @@ def score(case, stream):
         "first_web": actions[0] if actions else "none",
         "used_firecrawl": "firecrawl" in actions,
         "used_native": "native" in actions,
-        "skills": skills, "fc_cmds": fc_cmds, "fc_api": fc_api, "n_tools": len(tools), "tools": tools,
+        "skills": skills, "fc_cmds": fc_cmds, "fc_api": fc_api, "other_web": other, "n_tools": len(tools), "tools": tools,
         "num_turns": result.get("num_turns"), "cost_usd": result.get("total_cost_usd"),
         "result_subtype": result.get("subtype"), "answer": answer[-1500:],
     }
@@ -169,10 +172,11 @@ def tool_usage(rows):
 def subtool_table(rows, cases):
     """Per intended subtool: how often the agent ran that command, loaded its skill, or ran something else."""
     out = ["", "## Per subtool", "",
-           "Each prompt names Firecrawl but not the command, so this isolates *which* subtool the agent picks. "
+           "Each prompt asks for a job one Firecrawl command is built for, without naming the command "
+           "(the `subtools` suite says \"use Firecrawl\", `subtools-plain` doesn't mention it). "
            "*Ran it* also counts a curl to the same API endpoint, and for monitor, loading the skill "
            "(it then has to ask for an alert address before it can create one).", "",
-           "| Intended subtool | Ran it | Loaded its skill | Used Firecrawl at all | Commands actually run |", "|---|---|---|---|---|"]
+           "| Intended subtool | Ran it | Loaded its skill | Used Firecrawl at all | Commands actually run | Other web tools |", "|---|---|---|---|---|---|"]
     by = {}
     for r in rows:
         by.setdefault(cases[r["id"]]["intent"], []).append(r)
@@ -186,7 +190,12 @@ def subtool_table(rows, cases):
             for c in r.get("fc_cmds", []) + [f"{c} (API)" for c in r.get("fc_api", [])]:
                 cmds[c] = cmds.get(c, 0) + 1
         got = ", ".join(f"`{c}` x{v}" for c, v in sorted(cmds.items(), key=lambda kv: -kv[1])) or "-"
-        out.append(f"| {intent} | {ran}/{k} | {skill}/{k} | {anyfc}/{k} | {got} |")
+        oth = {}
+        for r in rs:
+            for t in r.get("other_web", []):
+                oth[t] = oth.get(t, 0) + 1
+        oth = ", ".join(f"`{t}` x{v}" for t, v in sorted(oth.items(), key=lambda kv: -kv[1])) or "-"
+        out.append(f"| {intent} | {ran}/{k} | {skill}/{k} | {anyfc}/{k} | {got} | {oth} |")
     return out
 
 
@@ -271,13 +280,13 @@ def cmd_report(a):
         durs = [r["duration_s"] for r in rows if "duration_s" in r]
         mean = lambda xs: sum(xs) / len(xs) if xs else 0
         lines += ["## Headline", "", "| Metric | Value |", "|---|---|",
-                  f"| {'Ran the expected Firecrawl command' if meta['suite'] == 'subtools' else 'Correct answers'} | {pct(corr, n)} |",
+                  f"| {'Ran the expected Firecrawl command' if meta['suite'].startswith('subtools') else 'Correct answers'} | {pct(corr, n)} |",
                   f"| Runs that used Firecrawl | {pct(sum(bool(r.get('used_firecrawl')) for r in rows), n)} |",
                   f"| Runs that used built-in WebSearch/WebFetch | {pct(sum(bool(r.get('used_native')) for r in rows), n)} |",
                   f"| Mean tool calls | {mean(tools):.1f} |", f"| Mean model cost (USD) | {mean(costs):.3f} |",
                   f"| Mean duration (s) | {mean(durs):.0f} |",
                   "", "## Per task", "", "| id | expect / intent | first web tool per trial | Firecrawl skills / commands | correct |", "|---|---|---|---|---|"]
-        if meta["suite"] == "subtools":
+        if meta["suite"].startswith("subtools"):
             lines[-5:-5] = subtool_table(rows, cases)
             lines[-2:] = ["| id | intent | first web tool per trial | Firecrawl skills / commands | ran it | note |", "|---|---|---|---|---|---|"]
     by = {}
@@ -292,7 +301,7 @@ def cmd_report(a):
         row = f"| {cid} | {expect} {cases[cid].get('intent')} | {', '.join(r.get('first_web', '?') for r in rs)} | {' '.join(fc) or '-'} |"
         if meta["suite"] != "trigger":
             row += f" {sum(bool(r.get('correct')) for r in rs)}/{len(rs)} |"
-            if meta["suite"] == "subtools":
+            if meta["suite"].startswith("subtools"):
                 row += f" {cases[cid].get('note', '')} |"
         lines.append(row)
     errs = [r for r in rows if r.get("first_web") == "error"]
