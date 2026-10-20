@@ -25,7 +25,7 @@ SUITES = {"trigger": ROOT / "trigger" / "prompts.jsonl", "tasks": ROOT / "tasks"
 PASS_ENV = ["PATH", "HOME", "ANTHROPIC_BASE_URL", "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN",
             "HTTPS_PROXY", "HTTP_PROXY", "NO_PROXY", "https_proxy", "http_proxy", "no_proxy",
             "NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE", "FIRECRAWL_API_KEY", "FIRECRAWL_API_URL",
-            "IS_SANDBOX"]  # IS_SANDBOX lets bypassPermissions run as root in a container
+            "IS_SANDBOX", "CLAUDE_CODE_REMOTE"]  # IS_SANDBOX lets bypassPermissions run as root in a container
 FC_CMD = re.compile(r"(?:^|[\s;&|(`])(?:npx\s+(?:-y\s+)?firecrawl-cli(?:@\S+)?|firecrawl)\s+((?:(?:x|experimental)\s+)?(?:--)?[a-z][\w-]*)?")
 # Direct HTTP calls to the Firecrawl API (the developer-index skill documents this route for repo/PR filters)
 FC_API = re.compile(r"api\.firecrawl\.dev/v\d+/([a-z-]+)(?:/([a-z-]+))?")
