@@ -1,0 +1,11 @@
+{
+  "suite": "subtools-plain",
+  "label": "boost",
+  "skills_ref": "7cc9fc8",
+  "model": "claude-sonnet-5-5",
+  "trials": 3,
+  "max_turns": 12,
+  "started": "2026-10-19T16:56:25.392071Z",
+  "firecrawl_key": true,
+  "claude_version": "2.1.303 (Claude Code)"
+}

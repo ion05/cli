@@ -1,0 +1,11 @@
+{
+  "suite": "subtools-plain",
+  "label": "r4-base",
+  "skills_ref": "WORKTREE",
+  "model": "claude-sonnet-5-5",
+  "trials": 2,
+  "max_turns": 12,
+  "started": "2026-10-19T23:26:24.822366Z",
+  "firecrawl_key": true,
+  "claude_version": "2.1.304 (Claude Code)"
+}

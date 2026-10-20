@@ -1,0 +1,122 @@
+{
+  "accuracy": 1.0,
+  "firecrawl_used": 0.7083333333333334,
+  "tool_calls": {
+    "runs": 24,
+    "builtin_tools": {
+      "Bash": {
+        "calls": 43,
+        "runs": 24
+      },
+      "Skill": {
+        "calls": 17,
+        "runs": 17
+      }
+    },
+    "firecrawl_skills": {
+      "firecrawl-search": {
+        "calls": 13,
+        "runs": 13
+      },
+      "firecrawl-developer-index": {
+        "calls": 3,
+        "runs": 3
+      },
+      "firecrawl-scrape": {
+        "calls": 1,
+        "runs": 1
+      },
+      "firecrawl": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-agent": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-alexandria": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-crawl": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-download": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-interact": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-map": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-monitor": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-parse": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-research-index": {
+        "calls": 0,
+        "runs": 0
+      }
+    },
+    "firecrawl_cli": {
+      "scrape": {
+        "calls": 14,
+        "runs": 7
+      },
+      "search": {
+        "calls": 13,
+        "runs": 13
+      },
+      "agent": {
+        "calls": 0,
+        "runs": 0
+      },
+      "alexandria": {
+        "calls": 0,
+        "runs": 0
+      },
+      "crawl": {
+        "calls": 0,
+        "runs": 0
+      },
+      "developer": {
+        "calls": 0,
+        "runs": 0
+      },
+      "download": {
+        "calls": 0,
+        "runs": 0
+      },
+      "interact": {
+        "calls": 0,
+        "runs": 0
+      },
+      "map": {
+        "calls": 0,
+        "runs": 0
+      },
+      "monitor": {
+        "calls": 0,
+        "runs": 0
+      },
+      "parse": {
+        "calls": 0,
+        "runs": 0
+      },
+      "research": {
+        "calls": 0,
+        "runs": 0
+      }
+    },
+    "firecrawl_api": {}
+  }
+}
