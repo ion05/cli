@@ -1,7 +1,7 @@
 ---
 name: firecrawl-crawl
 description: |
-  Fetch many pages of one site or section in a single job: "every page under /docs", "the first N pages under a URL", summarize or collect a whole section. Use instead of several scrape calls, or map and then scrape, whenever you need more than a couple of pages from the same site. Not when you already have the URLs (one scrape call takes many) or need a single page.
+  Fetch many pages of one site or section in a single job: "every page under /docs", "the first N pages under a URL", summarize or collect a whole section. Use instead of several scrape calls, or map and then scrape, whenever you need more than a couple of pages from the same site.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)
