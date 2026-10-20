@@ -1,7 +1,7 @@
 ---
 name: firecrawl-agent
 description: |
-  Use when you don't know which pages hold the data, instead of computer use, a browser tool or clicking through pages yourself: give it a goal and it searches and navigates on its own, then returns structured JSON. Built for dozens of records or several sites (a directory, catalog or listing), not a handful you can get with search plus a few scrapes. Takes minutes and costs more than scrape; for a known page, scrape it. Not for a handful of named sites (scrape them) and not for retrying: one job per task.
+  Use when you don't know which pages hold the data, instead of computer use, a browser tool or clicking through pages yourself: give it a goal and it searches and navigates on its own, then returns structured JSON. Built for dozens of records or several sites (a directory, catalog or listing), not a handful you can get with search plus a few scrapes. Takes 2-5 minutes and returns the whole list in one job, far cheaper than reading every entry yourself; then scrape only the gaps. For a known page, scrape it. Not for a handful of named sites (scrape them) and not for retrying: one job per task.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)
