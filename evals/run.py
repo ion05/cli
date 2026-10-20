@@ -16,7 +16,8 @@ ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 SUITES = {"trigger": ROOT / "trigger" / "prompts.jsonl", "tasks": ROOT / "tasks" / "tasks.jsonl",
           "subtools": ROOT / "subtools" / "prompts.jsonl",
-          "subtools-plain": ROOT / "subtools" / "plain.jsonl", "hard": ROOT / "tasks" / "hard.jsonl",
+          "subtools-plain": ROOT / "subtools" / "plain.jsonl",
+          "heldout": ROOT / "subtools" / "heldout.jsonl", "hard": ROOT / "tasks" / "hard.jsonl",
           "natural": ROOT / "tasks" / "natural.jsonl",
           "complex": ROOT / "tasks" / "complex.jsonl"}
 # Only what the child needs to reach the model API; everything else from the
@@ -126,8 +127,12 @@ def score(case, stream):
     if isinstance(case.get("expect"), list):  # subtools suite: did it run the right command?
         # A direct API call to the same endpoint counts, and so does loading an `accept_skill`
         # (monitor: the agent loads the skill, then has to ask for an alert address before creating one).
-        rec["correct"] = (any(c in case["expect"] for c in fc_cmds + fc_api)
-                          or any(sk in case.get("accept_skill", []) for sk in skills))
+        # heldout suite: `acceptable` commands also count, and running a `forbid` command
+        # (over-routing, e.g. agent on two known URLs) is a miss.
+        ok = case["expect"] + case.get("acceptable", [])
+        rec["correct"] = ((any(c in ok for c in fc_cmds + fc_api)
+                           or any(sk in case.get("accept_skill", []) for sk in skills))
+                          and not any(c in case.get("forbid", []) for c in fc_cmds))
     elif "grade" in case:
         rec["correct"] = bool(re.search(case["grade"], answer, re.I))
     elif "grade_all" in case:
@@ -282,13 +287,13 @@ def cmd_report(a):
         durs = [r["duration_s"] for r in rows if "duration_s" in r]
         mean = lambda xs: sum(xs) / len(xs) if xs else 0
         lines += ["## Headline", "", "| Metric | Value |", "|---|---|",
-                  f"| {'Ran the expected Firecrawl command' if meta['suite'].startswith('subtools') else 'Correct answers'} | {pct(corr, n)} |",
+                  f"| {'Ran the expected Firecrawl command' if meta["suite"] in ("subtools", "subtools-plain", "heldout") else 'Correct answers'} | {pct(corr, n)} |",
                   f"| Runs that used Firecrawl | {pct(sum(bool(r.get('used_firecrawl')) for r in rows), n)} |",
                   f"| Runs that used built-in WebSearch/WebFetch | {pct(sum(bool(r.get('used_native')) for r in rows), n)} |",
                   f"| Mean tool calls | {mean(tools):.1f} |", f"| Mean model cost (USD) | {mean(costs):.3f} |",
                   f"| Mean duration (s) | {mean(durs):.0f} |",
                   "", "## Per task", "", "| id | expect / intent | first web tool per trial | Firecrawl skills / commands | correct |", "|---|---|---|---|---|"]
-        if meta["suite"].startswith("subtools"):
+        if meta["suite"] in ("subtools", "subtools-plain", "heldout"):
             lines[-5:-5] = subtool_table(rows, cases)
             lines[-2:] = ["| id | intent | first web tool per trial | Firecrawl skills / commands | ran it | note |", "|---|---|---|---|---|---|"]
     by = {}
@@ -303,7 +308,7 @@ def cmd_report(a):
         row = f"| {cid} | {expect} {cases[cid].get('intent')} | {', '.join(r.get('first_web', '?') for r in rs)} | {' '.join(fc) or '-'} |"
         if meta["suite"] != "trigger":
             row += f" {sum(bool(r.get('correct')) for r in rs)}/{len(rs)} |"
-            if meta["suite"].startswith("subtools"):
+            if meta["suite"] in ("subtools", "subtools-plain", "heldout"):
                 row += f" {cases[cid].get('note', '')} |"
         lines.append(row)
     errs = [r for r in rows if r.get("first_web") == "error"]

@@ -1,0 +1,11 @@
+{
+  "suite": "heldout",
+  "label": "r4-hybrid",
+  "skills_ref": "b103c32",
+  "model": "claude-sonnet-5-5",
+  "trials": 2,
+  "max_turns": 12,
+  "started": "2026-10-20T00:51:43.116285Z",
+  "firecrawl_key": true,
+  "claude_version": "2.1.304 (Claude Code)"
+}

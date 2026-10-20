@@ -1,0 +1,143 @@
+{
+  "accuracy": 0.9375,
+  "firecrawl_used": 0.9583333333333334,
+  "tool_calls": {
+    "runs": 48,
+    "builtin_tools": {
+      "Bash": {
+        "calls": 107,
+        "runs": 42
+      },
+      "Skill": {
+        "calls": 46,
+        "runs": 46
+      }
+    },
+    "firecrawl_skills": {
+      "firecrawl-alexandria": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl-crawl": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl-developer-index": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl-download": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl-interact": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl-map": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl-monitor": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl-parse": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl-research-index": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl-scrape": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl-search": {
+        "calls": 4,
+        "runs": 4
+      },
+      "firecrawl": {
+        "calls": 2,
+        "runs": 2
+      },
+      "firecrawl-agent": {
+        "calls": 0,
+        "runs": 0
+      }
+    },
+    "firecrawl_cli": {
+      "scrape": {
+        "calls": 32,
+        "runs": 21
+      },
+      "interact": {
+        "calls": 10,
+        "runs": 4
+      },
+      "search": {
+        "calls": 8,
+        "runs": 8
+      },
+      "map": {
+        "calls": 5,
+        "runs": 5
+      },
+      "alexandria": {
+        "calls": 4,
+        "runs": 4
+      },
+      "crawl": {
+        "calls": 4,
+        "runs": 4
+      },
+      "download": {
+        "calls": 4,
+        "runs": 4
+      },
+      "parse": {
+        "calls": 4,
+        "runs": 4
+      },
+      "research": {
+        "calls": 4,
+        "runs": 4
+      },
+      "find-tools": {
+        "calls": 2,
+        "runs": 2
+      },
+      "list": {
+        "calls": 2,
+        "runs": 2
+      },
+      "status": {
+        "calls": 2,
+        "runs": 2
+      },
+      "agent": {
+        "calls": 1,
+        "runs": 1
+      },
+      "gh": {
+        "calls": 1,
+        "runs": 1
+      },
+      "developer": {
+        "calls": 0,
+        "runs": 0
+      },
+      "monitor": {
+        "calls": 0,
+        "runs": 0
+      }
+    },
+    "firecrawl_api": {
+      "developer": {
+        "calls": 6,
+        "runs": 4
+      }
+    }
+  }
+}
