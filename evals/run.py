@@ -19,7 +19,8 @@ SUITES = {"trigger": ROOT / "trigger" / "prompts.jsonl", "tasks": ROOT / "tasks"
           "subtools-plain": ROOT / "subtools" / "plain.jsonl",
           "heldout": ROOT / "subtools" / "heldout.jsonl", "hard": ROOT / "tasks" / "hard.jsonl",
           "natural": ROOT / "tasks" / "natural.jsonl",
-          "complex": ROOT / "tasks" / "complex.jsonl"}
+          "complex": ROOT / "tasks" / "complex.jsonl",
+          "fresh": ROOT / "tasks" / "fresh.jsonl"}
 # Only what the child needs to reach the model API; everything else from the
 # parent session (hooks, synced skills, MCP servers) stays out.
 PASS_ENV = ["PATH", "HOME", "ANTHROPIC_BASE_URL", "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN",

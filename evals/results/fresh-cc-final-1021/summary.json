@@ -1,0 +1,138 @@
+{
+  "accuracy": 0.0,
+  "firecrawl_used": 0.42857142857142855,
+  "tool_calls": {
+    "runs": 84,
+    "builtin_tools": {
+      "Bash": {
+        "calls": 86,
+        "runs": 43
+      },
+      "WebSearch": {
+        "calls": 44,
+        "runs": 38
+      },
+      "ToolSearch": {
+        "calls": 39,
+        "runs": 39
+      },
+      "Skill": {
+        "calls": 38,
+        "runs": 38
+      },
+      "WebFetch": {
+        "calls": 2,
+        "runs": 2
+      }
+    },
+    "firecrawl_skills": {
+      "firecrawl-search": {
+        "calls": 29,
+        "runs": 29
+      },
+      "firecrawl-scrape": {
+        "calls": 4,
+        "runs": 4
+      },
+      "claude-api": {
+        "calls": 3,
+        "runs": 3
+      },
+      "firecrawl-developer-index": {
+        "calls": 2,
+        "runs": 2
+      },
+      "firecrawl": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-agent": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-alexandria": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-crawl": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-download": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-interact": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-map": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-monitor": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-parse": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-research-index": {
+        "calls": 0,
+        "runs": 0
+      }
+    },
+    "firecrawl_cli": {
+      "search": {
+        "calls": 36,
+        "runs": 27
+      },
+      "scrape": {
+        "calls": 22,
+        "runs": 16
+      },
+      "agent": {
+        "calls": 0,
+        "runs": 0
+      },
+      "alexandria": {
+        "calls": 0,
+        "runs": 0
+      },
+      "crawl": {
+        "calls": 0,
+        "runs": 0
+      },
+      "developer": {
+        "calls": 0,
+        "runs": 0
+      },
+      "download": {
+        "calls": 0,
+        "runs": 0
+      },
+      "interact": {
+        "calls": 0,
+        "runs": 0
+      },
+      "map": {
+        "calls": 0,
+        "runs": 0
+      },
+      "monitor": {
+        "calls": 0,
+        "runs": 0
+      },
+      "parse": {
+        "calls": 0,
+        "runs": 0
+      },
+      "research": {
+        "calls": 0,
+        "runs": 0
+      }
+    },
+    "firecrawl_api": {}
+  }
+}
