@@ -1,0 +1,19 @@
+{
+  "suite": "hardtools",
+  "agent": "codex",
+  "label": "codex-final-1020",
+  "skills_ref": "660ddb7",
+  "model": "(codex default)",
+  "effort": null,
+  "price_per_mtok": [
+    1.25,
+    0.125,
+    10.0
+  ],
+  "trials": 2,
+  "started": "2026-10-21T01:07:57.556761Z",
+  "firecrawl_key": true,
+  "codex_version": "codex-cli 0.163.0",
+  "max_turns": "n/a",
+  "claude_version": "codex-cli 0.163.0"
+}

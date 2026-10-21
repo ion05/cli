@@ -135,7 +135,7 @@ def run_one(case, trial, skills_src, block_fc, outdir, a, price, fixture_dirs=()
     else:
         home.mkdir()
     if AUTH.exists():  # ChatGPT sign-in from `codex login --device-auth`
-        shutil.copy(AUTH, home / "auth.json")
+        (home / "auth.json").symlink_to(AUTH)
     env = {k: os.environ[k] for k in PASS_ENV if k in os.environ}
     env.setdefault("CODEX_CA_CERTIFICATE", env.get("SSL_CERT_FILE", ""))
     env["CODEX_HOME"] = str(home)
