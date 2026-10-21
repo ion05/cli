@@ -1,7 +1,7 @@
 ---
 name: firecrawl-parse
 description: |
-  Convert or extract text from a local document (PDF, DOCX, XLSX, PPTX, HTML, …) as markdown, or answer questions about its content. Use instead of pdftotext or similar converters whenever the input is a document file path rather than a URL. Not for plain code or text files, which Read handles.
+  Read any local document (PDF, DOCX, XLSX, PPTX, HTML, …): extract its text, find a value in it, summarize it, list its columns or count its rows. Use instead of pdftotext, pypdf, python-docx, openpyxl or pandas whenever the input is a document file path, even a one-page PDF. Not for plain code or text files, which Read handles.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)
