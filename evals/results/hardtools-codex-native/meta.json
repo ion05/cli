@@ -1,0 +1,17 @@
+{
+  "suite": "hardtools",
+  "agent": "codex",
+  "label": "codex-native",
+  "skills_ref": "NONE",
+  "model": "gpt-6.1-sol",
+  "effort": null,
+  "price_per_mtok": [
+    1.25,
+    0.125,
+    10.0
+  ],
+  "trials": 2,
+  "started": "2026-10-18T00:01:19.077625Z",
+  "firecrawl_key": false,
+  "codex_version": "codex-cli 0.163.0"
+}
