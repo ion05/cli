@@ -1,11 +1,11 @@
 {
   "suite": "hardtools",
   "label": "reference",
-  "skills_ref": "a3648a8",
+  "skills_ref": "660ddb7",
   "model": "claude-opus-5-5",
   "trials": 1,
   "max_turns": 250,
-  "started": "2026-10-17T18:36:58.683987Z",
+  "started": "2026-10-21T23:16:26.726517Z",
   "firecrawl_key": true,
-  "claude_version": "2.1.302 (Claude Code)"
+  "claude_version": "2.1.306 (Claude Code)"
 }
