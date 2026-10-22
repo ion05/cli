@@ -19,7 +19,8 @@ SUITES = {"trigger": ROOT / "trigger" / "prompts.jsonl", "tasks": ROOT / "tasks"
           "subtools-plain": ROOT / "subtools" / "plain.jsonl",
           "heldout": ROOT / "subtools" / "heldout.jsonl", "hard": ROOT / "tasks" / "hard.jsonl",
           "natural": ROOT / "tasks" / "natural.jsonl",
-          "complex": ROOT / "tasks" / "complex.jsonl"}
+          "complex": ROOT / "tasks" / "complex.jsonl",
+          "fresh": ROOT / "tasks" / "fresh.jsonl"}
 # Only what the child needs to reach the model API; everything else from the
 # parent session (hooks, synced skills, MCP servers) stays out.
 PASS_ENV = ["PATH", "HOME", "ANTHROPIC_BASE_URL", "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN",
@@ -129,15 +130,19 @@ def score(case, stream):
         # (monitor: the agent loads the skill, then has to ask for an alert address before creating one).
         # heldout suite: `acceptable` commands also count, and running a `forbid` command
         # (over-routing, e.g. agent on two known URLs) is a miss.
-        ok = case["expect"] + case.get("acceptable", [])
-        rec["correct"] = ((any(c in ok for c in fc_cmds + fc_api)
-                           or any(sk in case.get("accept_skill", []) for sk in skills))
-                          and not any(c in case.get("forbid", []) for c in fc_cmds))
+        rec["correct"] = subtool_correct(case, rec)
     elif "grade" in case:
         rec["correct"] = bool(re.search(case["grade"], answer, re.I))
     elif "grade_all" in case:
         rec["correct"] = all(re.search(g, answer, re.I) for g in case["grade_all"])
     return rec
+
+
+def subtool_correct(case, r):
+    ok = case["expect"] + case.get("acceptable", [])
+    return ((any(c in ok for c in r.get("fc_cmds", []) + r.get("fc_api", []))
+             or any(sk in case.get("accept_skill", []) for sk in r.get("skills", [])))
+            and not any(c in case.get("forbid", []) for c in r.get("fc_cmds", [])))
 
 
 def tool_usage(rows):
@@ -250,7 +255,11 @@ def cmd_report(a):
     d = Path(a.dir)
     meta = json.loads((d / "meta.json").read_text())
     rows = [json.loads(l) for l in (d / "runs.jsonl").read_text().splitlines() if l.strip()]
+    rows = list({(r["id"], r["trial"]): r for r in rows}.values())  # a retried run replaces its failed row
     cases = {c["id"]: c for c in load_suite(meta["suite"])}
+    for r in rows:  # Codex rows from before run_codex graded subtools
+        if r.get("correct") is None and isinstance(cases.get(r["id"], {}).get("expect"), list):
+            r["correct"] = subtool_correct(cases[r["id"]], r)
     pct = lambda n, k: f"{100 * n / k:.0f}% ({n}/{k})" if k else "-"
     lines = [f"# {meta['suite']} eval: {meta['label']}", "",
              f"Skills `{meta['skills_ref']}` · model `{meta['model']}` · {meta['trials']} trials · max {meta['max_turns']} turns · "

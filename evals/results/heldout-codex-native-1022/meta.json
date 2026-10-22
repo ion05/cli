@@ -1,0 +1,19 @@
+{
+  "suite": "heldout",
+  "agent": "codex",
+  "label": "codex-native-1022",
+  "skills_ref": "NONE",
+  "model": "(codex default)",
+  "effort": null,
+  "price_per_mtok": [
+    1.25,
+    0.125,
+    10.0
+  ],
+  "trials": 3,
+  "started": "2026-10-22T00:35:49.698213Z",
+  "firecrawl_key": false,
+  "codex_version": "codex-cli 0.163.0",
+  "max_turns": "n/a",
+  "claude_version": "codex-cli 0.163.0"
+}
