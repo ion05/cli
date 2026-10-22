@@ -1,7 +1,7 @@
 ---
 name: firecrawl-agent
 description: |
-  Use when you don't know which pages hold the data, instead of computer use, a browser tool or clicking through pages yourself: give it a goal and it searches and navigates on its own, then returns structured JSON. Built for 15+ records or several sites (a directory, catalog or listing: "find 20 startups that…", "list every X with Y"). For one known page, scrape it.
+  Use for a table of the same facts across 5+ named things on different sites (vendors, schools, cities, plans) or a list of records when you don't know which pages hold them, instead of a search-and-scrape loop per site, your own subagents, or a browser tool. Give it a goal and a schema; it searches and navigates on its own and returns structured JSON in 1-3 minutes. For one known page, scrape it.
 allowed-tools:
   - Bash(firecrawl *)
   - Bash(npx firecrawl-cli *)
@@ -9,7 +9,19 @@ allowed-tools:
 
 # firecrawl agent
 
-AI-powered autonomous extraction. The agent navigates sites and extracts structured data (takes 2-5 minutes).
+AI-powered autonomous extraction. The agent navigates sites and extracts structured data, usually in 1-3 minutes (a few hundred credits for a 10-20 row table).
+
+**Pattern for comparison tables and lists:** start the agent first, then verify.
+
+```bash
+# 1. Start the job without --wait; ask for a source URL per row so you can check it
+firecrawl agent "<the user's question, with every entity named>" --schema '{"type":"object","properties":{"rows":{"type":"array","items":{"type":"object","properties":{"name":{"type":"string"},"<field>":{"type":"string"},"source_url":{"type":"string"}}}}}}' --json -o .firecrawl/agent-job.json
+# 2. While it runs, scrape the 2-3 pages you are least sure the agent will get right
+# 3. Collect it, then scrape the source_url of any row that looks wrong, empty or surprising
+firecrawl agent "<job-id>" --wait --json -o .firecrawl/agent.json
+```
+
+Its rows are a draft: keep the ones whose source confirms them and fix the rest from the page itself.
 
 Before starting autonomous extraction for structured records or listings, check `firecrawl search alexandria '<data you need>'` for a ready-made workflow or data provider. Inspect a matching contract with `firecrawl list <provider> <capability> --pretty` and execute with `firecrawl scrape --alexandria <provider>/<capability> --options '<input JSON>'` if it covers the task. Use the exact provider, capability, and input fields from that contract. Continue with Agent when no suitable tool exists or the task requires autonomous navigation.
 
@@ -59,7 +71,7 @@ firecrawl agent "<job-id>" --cancel
 
 - Use `--wait` for inline results; omit it only when you want a job ID to poll later (see [Job IDs](#job-ids)).
 - Use `--schema` for predictable, structured output — otherwise the agent returns freeform data.
-- Agent runs consume more credits than simple scrapes. Use `--max-credits` to cap spending.
+- Use `--max-credits` to cap spending if the user has a budget.
 - For simple single-page extraction, prefer `scrape` — it's faster and cheaper.
 
 ## See also
