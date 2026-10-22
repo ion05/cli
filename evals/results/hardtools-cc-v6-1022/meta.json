@@ -1,0 +1,11 @@
+{
+  "suite": "hardtools",
+  "label": "cc-v6-1022",
+  "skills_ref": "badb0c9",
+  "model": "claude-sonnet-5-5",
+  "trials": 2,
+  "max_turns": 80,
+  "started": "2026-10-22T16:28:16.166584Z",
+  "firecrawl_key": true,
+  "claude_version": "2.1.308 (Claude Code)"
+}
