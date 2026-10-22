@@ -34,7 +34,9 @@ firecrawl x download https://docs.example.com --exclude-paths "/zh,/ja,/fr,/es,/
 
 Run `firecrawl x download --help` for the full option list, including which scrape options download supports.
 
-**Done when:** the command exits successfully and the expected files exist under `.firecrawl/`.
+For "the first N pages" or named pages, `map` the section first, pick those URLs in the site's own order, and pass them with `--include-paths`: `--limit` alone takes whichever pages it finds first.
+
+**Done when:** the command exits successfully and the files you meant to save exist under `.firecrawl/` (list them).
 
 ## See also
 

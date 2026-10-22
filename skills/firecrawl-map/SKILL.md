@@ -25,6 +25,8 @@ firecrawl map "<url>" --limit 500 --json -o .firecrawl/urls.json
 
 Run `firecrawl map --help` for the full option list (sitemap handling, subdomains, etc.).
 
+For "every page about X", `--search` ranks a subset: raise `--limit`, read the whole list and keep every matching URL (ignore translated copies), not just the top few.
+
 **Done when:** the URL list is saved under `.firecrawl/` and you have selected the URLs to scrape or crawl next.
 
 ## Tips

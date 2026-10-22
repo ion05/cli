@@ -19,7 +19,7 @@ There is **no fixed recipe**. Read the question, decide what kind it is, and cho
   The default first move for a developer question. It is the only surface that returns the passages, which is what lets you answer instead of pointing at a page.
   `k` / `--limit` is 1–100 and defaults to 10. `skills="only"` (HTTP/MCP only) restricts the search to agent-skill files.
   Keyless calls hit a rate limit after a few requests: with `curl`, always send `-H "Authorization: Bearer $FIRECRAWL_API_KEY"` when the key is set (the CLI sends it for you).
-  The index can lag GitHub by days. For current state (the latest merged PR, whether an issue is still open), scrape the GitHub page with `--max-age 0`.
+  The index can lag GitHub by days. For current state (the latest merged PR, whether an issue is still open), scrape the GitHub page with `--max-age 0`. Before calling an issue open or a PR merged, confirm it on its own GitHub page.
 
 - MCP: **`firecrawl_search(query, categories: ["developer"])`**
   CLI: **`firecrawl search <query> --categories developer`**
