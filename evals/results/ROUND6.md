@@ -24,6 +24,7 @@ Run 2026-10-22, Sonnet 5.5, Claude Code 2.1.308, firecrawl-cli 1.26.20. Multi-si
 |---|---|---|
 | Judge /100 | 75 | 76 |
 | Judge /100 without i2 | 78 | 80 |
+| Judge /100 on the 8 agent tasks (agent alone: 74) | 74 | 78 |
 | Ran an intended command | 13/48 (27%) | 18/48 (38%) |
 | ... without i2 | 11/46 (24%) | 16/46 (35%) |
 | Agent tasks that ran `agent` | 0/16 | 5/16 |
