@@ -1,0 +1,11 @@
+{
+  "suite": "heldout",
+  "label": "cc-native-1021",
+  "skills_ref": "NONE",
+  "model": "claude-sonnet-5-5",
+  "trials": 3,
+  "max_turns": 12,
+  "started": "2026-10-22T00:03:47.582030Z",
+  "firecrawl_key": true,
+  "claude_version": "2.1.306 (Claude Code)"
+}

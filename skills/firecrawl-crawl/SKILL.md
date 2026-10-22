@@ -28,7 +28,7 @@ firecrawl crawl <job-id>
 
 Run `firecrawl crawl --help` for the full option list.
 
-**Done when:** the crawl reaches a terminal status and the saved output under `.firecrawl/` contains the expected pages.
+**Done when:** the crawl reaches a terminal status and the saved output under `.firecrawl/` contains the expected pages. Count distinct URLs (crawls can return the same page twice, e.g. with and without a trailing slash) and compare them with the section's own navigation; scrape any page that's missing.
 
 ## Tips
 

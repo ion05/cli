@@ -1,0 +1,150 @@
+{
+  "accuracy": 0.5925925925925926,
+  "firecrawl_used": 0.7222222222222222,
+  "tool_calls": {
+    "runs": 108,
+    "builtin_tools": {
+      "Bash": {
+        "calls": 207,
+        "runs": 88
+      },
+      "Skill": {
+        "calls": 78,
+        "runs": 78
+      },
+      "WebSearch": {
+        "calls": 33,
+        "runs": 6
+      },
+      "ToolSearch": {
+        "calls": 14,
+        "runs": 14
+      },
+      "WebFetch": {
+        "calls": 11,
+        "runs": 9
+      },
+      "Read": {
+        "calls": 5,
+        "runs": 3
+      },
+      "Monitor": {
+        "calls": 1,
+        "runs": 1
+      }
+    },
+    "firecrawl_skills": {
+      "firecrawl-scrape": {
+        "calls": 28,
+        "runs": 28
+      },
+      "firecrawl-search": {
+        "calls": 9,
+        "runs": 9
+      },
+      "firecrawl-agent": {
+        "calls": 8,
+        "runs": 8
+      },
+      "firecrawl-crawl": {
+        "calls": 6,
+        "runs": 6
+      },
+      "firecrawl-interact": {
+        "calls": 6,
+        "runs": 6
+      },
+      "firecrawl-map": {
+        "calls": 6,
+        "runs": 6
+      },
+      "firecrawl-parse": {
+        "calls": 6,
+        "runs": 6
+      },
+      "firecrawl-developer-index": {
+        "calls": 3,
+        "runs": 3
+      },
+      "firecrawl-download": {
+        "calls": 3,
+        "runs": 3
+      },
+      "firecrawl-research-index": {
+        "calls": 3,
+        "runs": 3
+      },
+      "firecrawl": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-alexandria": {
+        "calls": 0,
+        "runs": 0
+      },
+      "firecrawl-monitor": {
+        "calls": 0,
+        "runs": 0
+      }
+    },
+    "firecrawl_cli": {
+      "scrape": {
+        "calls": 68,
+        "runs": 46
+      },
+      "map": {
+        "calls": 16,
+        "runs": 13
+      },
+      "interact": {
+        "calls": 14,
+        "runs": 6
+      },
+      "search": {
+        "calls": 13,
+        "runs": 13
+      },
+      "crawl": {
+        "calls": 8,
+        "runs": 6
+      },
+      "agent": {
+        "calls": 5,
+        "runs": 5
+      },
+      "research": {
+        "calls": 5,
+        "runs": 3
+      },
+      "parse": {
+        "calls": 4,
+        "runs": 4
+      },
+      "developer": {
+        "calls": 3,
+        "runs": 3
+      },
+      "download": {
+        "calls": 3,
+        "runs": 3
+      },
+      "list": {
+        "calls": 3,
+        "runs": 3
+      },
+      "version": {
+        "calls": 1,
+        "runs": 1
+      },
+      "alexandria": {
+        "calls": 0,
+        "runs": 0
+      },
+      "monitor": {
+        "calls": 0,
+        "runs": 0
+      }
+    },
+    "firecrawl_api": {}
+  }
+}

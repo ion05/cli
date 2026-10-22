@@ -135,7 +135,7 @@ def run_one(case, trial, skills_src, block_fc, outdir, a, price, fixture_dirs=()
     else:
         home.mkdir()
     if AUTH.exists():  # ChatGPT sign-in from `codex login --device-auth`
-        (home / "auth.json").symlink_to(AUTH)
+        (home / "auth.json").symlink_to(AUTH)  # shared so token refreshes reach the real file
     env = {k: os.environ[k] for k in PASS_ENV if k in os.environ}
     env.setdefault("CODEX_CA_CERTIFICATE", env.get("SSL_CERT_FILE", ""))
     env["CODEX_HOME"] = str(home)
@@ -145,6 +145,7 @@ def run_one(case, trial, skills_src, block_fc, outdir, a, price, fixture_dirs=()
             (shim / name).write_text(BLOCKED); (shim / name).chmod(0o755)
         env["PATH"] = f"{shim}:{env.get('PATH', '')}"
     cmd = ["codex", "exec", "--json", "--skip-git-repo-check", "--ephemeral", "-c", 'web_search="live"',
+           "--disable", "apps",  # the ChatGPT account's connectors (a Firecrawl app) would stand in for the CLI
            "-s", "workspace-write", "-c", "sandbox_workspace_write.network_access=true", "-C", str(work)]
     if a.model:
         cmd += ["-m", a.model]
@@ -161,7 +162,9 @@ def run_one(case, trial, skills_src, block_fc, outdir, a, price, fixture_dirs=()
     (outdir / "transcripts" / f"{tag}.jsonl").write_text(out)
     rec = score(out, price, skill_counts=a.suite != "hardtools")
     if a.suite != "hardtools":  # same grading as run.py
-        if "grade" in case:
+        if isinstance(case.get("expect"), list):
+            rec["correct"] = R.subtool_correct(case, rec)
+        elif "grade" in case:
             rec["correct"] = bool(re.search(case["grade"], rec["answer"], re.I))
         elif "grade_all" in case:
             rec["correct"] = all(re.search(g, rec["answer"], re.I) for g in case["grade_all"])

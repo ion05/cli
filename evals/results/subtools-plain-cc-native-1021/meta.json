@@ -1,0 +1,11 @@
+{
+  "suite": "subtools-plain",
+  "label": "cc-native-1021",
+  "skills_ref": "NONE",
+  "model": "claude-sonnet-5-5",
+  "trials": 3,
+  "max_turns": 12,
+  "started": "2026-10-21T23:27:41.086216Z",
+  "firecrawl_key": true,
+  "claude_version": "2.1.306 (Claude Code)"
+}

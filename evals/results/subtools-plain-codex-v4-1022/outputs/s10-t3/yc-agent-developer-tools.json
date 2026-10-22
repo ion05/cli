@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Agent Relay",
+    "website": "https://agentrelay.com",
+    "focus": "Let your teams' coding agents message each other",
+    "yc_profile": "https://www.ycombinator.com/companies/agent-relay"
+  },
+  {
+    "name": "Agent 37",
+    "website": "https://www.agent37.com/cloud",
+    "focus": "Persistent sandboxes for agents like hermes, openclaw, claude code",
+    "yc_profile": "https://www.ycombinator.com/companies/agent-37"
+  },
+  {
+    "name": "AgentMail",
+    "website": "https://agentmail.to",
+    "focus": "Email Inboxes for AI Agents",
+    "yc_profile": "https://www.ycombinator.com/companies/agentmail"
+  },
+  {
+    "name": "Golf",
+    "website": "https://golf.dev/",
+    "focus": "Agentic AI Security and Governance",
+    "yc_profile": "https://www.ycombinator.com/companies/golf"
+  },
+  {
+    "name": "Artil",
+    "website": "https://artil.ai/",
+    "focus": "Agent identity and communication infrastructure",
+    "yc_profile": "https://www.ycombinator.com/companies/artil"
+  },
+  {
+    "name": "Hue",
+    "website": "https://hue.run/",
+    "focus": "Test agents in realistic worlds built from production usage",
+    "yc_profile": "https://www.ycombinator.com/companies/hue"
+  },
+  {
+    "name": "Mirrors",
+    "website": "https://www.mirrors.dev",
+    "focus": "Give AI agents the right context at the right moment",
+    "yc_profile": "https://www.ycombinator.com/companies/mirrors"
+  },
+  {
+    "name": "Orgo",
+    "website": "https://www.orgo.ai",
+    "focus": "Computers for Agents",
+    "yc_profile": "https://www.ycombinator.com/companies/orgo"
+  },
+  {
+    "name": "Aden",
+    "website": "https://adenhq.com/",
+    "focus": "Open source agent generation framework",
+    "yc_profile": "https://www.ycombinator.com/companies/aden"
+  },
+  {
+    "name": "herdr",
+    "website": "https://herdr.dev/",
+    "focus": "building the open agent runtime",
+    "yc_profile": "https://www.ycombinator.com/companies/herdr"
+  },
+  {
+    "name": "TraceRoot.AI",
+    "website": "https://traceroot.ai",
+    "focus": "Open Source AI Agent Improvement Platform",
+    "yc_profile": "https://www.ycombinator.com/companies/traceroot-ai"
+  },
+  {
+    "name": "Dexto",
+    "website": "https://www.dexto.ai/",
+    "focus": "AWS for AI Agents",
+    "yc_profile": "https://www.ycombinator.com/companies/dexto"
+  },
+  {
+    "name": "Salus",
+    "website": "https://www.usesalus.ai/",
+    "focus": "Guardrails to validate your agent's actions before they execute",
+    "yc_profile": "https://www.ycombinator.com/companies/salus"
+  },
+  {
+    "name": "Lemma",
+    "website": "https://www.uselemma.ai/",
+    "focus": "Production Monitoring for AI agents",
+    "yc_profile": "https://www.ycombinator.com/companies/uselemma"
+  },
+  {
+    "name": "Notte",
+    "website": "https://www.notte.cc/",
+    "focus": "Browser infra for AI agents: sessions, auth, proxies, payments",
+    "yc_profile": "https://www.ycombinator.com/companies/notte"
+  },
+  {
+    "name": "Dedalus Labs",
+    "website": "https://www.dedaluslabs.ai/",
+    "focus": "Persistent computers for AI agents",
+    "yc_profile": "https://www.ycombinator.com/companies/dedalus-labs"
+  },
+  {
+    "name": "Capacitive",
+    "website": "https://capacitive.ai/",
+    "focus": "The data gateway for agents.",
+    "yc_profile": "https://www.ycombinator.com/companies/capacitive"
+  },
+  {
+    "name": "Laminar",
+    "website": "https://laminar.sh",
+    "focus": "Understand why your AI agent breaks. Iterate fast to fix it.",
+    "yc_profile": "https://www.ycombinator.com/companies/laminar"
+  },
+  {
+    "name": "Inconvo",
+    "website": "https://inconvo.com",
+    "focus": "Build chat-with-data agents for customer-facing applications",
+    "yc_profile": "https://www.ycombinator.com/companies/inconvo"
+  },
+  {
+    "name": "Velt",
+    "website": "https://velt.dev",
+    "focus": "SDK for adding an agent and human governance layer to your product",
+    "yc_profile": "https://www.ycombinator.com/companies/velt"
+  },
+  {
+    "name": "Hyperbrowser",
+    "website": "https://hyperbrowser.ai",
+    "focus": "Web infra for AI agents",
+    "yc_profile": "https://www.ycombinator.com/companies/hyperbrowser"
+  },
+  {
+    "name": "Archal",
+    "website": "https://www.archal.ai/",
+    "focus": "API sandboxes, built for AI agents",
+    "yc_profile": "https://www.ycombinator.com/companies/archal"
+  },
+  {
+    "name": "Alter",
+    "website": "https://alterauth.com",
+    "focus": "Privileged Access Management for AI Agents",
+    "yc_profile": "https://www.ycombinator.com/companies/alter"
+  },
+  {
+    "name": "Confident AI",
+    "website": "https://confident-ai.com",
+    "focus": "Production Monitoring & Evals for AI Agents",
+    "yc_profile": "https://www.ycombinator.com/companies/confident-ai"
+  },
+  {
+    "name": "Cekura",
+    "website": "https://www.cekura.ai/",
+    "focus": "Voice AI and Chat AI agents: Testing and Observability",
+    "yc_profile": "https://www.ycombinator.com/companies/cekura-ai"
+  },
+  {
+    "name": "Mem0",
+    "website": "https://mem0.ai",
+    "focus": "The Memory layer for AI Agents",
+    "yc_profile": "https://www.ycombinator.com/companies/mem0"
+  },
+  {
+    "name": "Mastra",
+    "website": "https://mastra.ai",
+    "focus": "The Javascript framework for building AI agents, from the Gatsby devs",
+    "yc_profile": "https://www.ycombinator.com/companies/mastra"
+  },
+  {
+    "name": "Freestyle",
+    "website": "https://www.freestyle.sh",
+    "focus": "The most powerful sandboxes for AI Agents",
+    "yc_profile": "https://www.ycombinator.com/companies/freestyle"
+  },
+  {
+    "name": "Trigger.dev",
+    "website": "https://trigger.dev",
+    "focus": "Build and deploy fully\u2011managed AI agents and workflows",
+    "yc_profile": "https://www.ycombinator.com/companies/trigger-dev"
+  },
+  {
+    "name": "Manufact",
+    "website": "https://manufact.com",
+    "focus": "Cloud infrastructure for MCP servers and Claude / ChatGPT plugins.",
+    "yc_profile": "https://www.ycombinator.com/companies/manufact"
+  }
+]

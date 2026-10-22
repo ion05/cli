@@ -1,16 +1,16 @@
 {
   "accuracy": 0.0,
-  "firecrawl_used": 0.9375,
+  "firecrawl_used": 0.9166666666666666,
   "tool_calls": {
-    "runs": 16,
+    "runs": 24,
     "builtin_tools": {
       "Bash": {
-        "calls": 662,
-        "runs": 16
+        "calls": 752,
+        "runs": 24
       },
       "Skill": {
-        "calls": 25,
-        "runs": 15
+        "calls": 32,
+        "runs": 22
       },
       "Agent": {
         "calls": 24,
@@ -19,15 +19,23 @@
       "Monitor": {
         "calls": 1,
         "runs": 1
+      },
+      "Read": {
+        "calls": 1,
+        "runs": 1
       }
     },
     "firecrawl_skills": {
       "firecrawl": {
-        "calls": 17,
-        "runs": 14
+        "calls": 21,
+        "runs": 18
       },
       "firecrawl-scrape": {
-        "calls": 6,
+        "calls": 7,
+        "runs": 3
+      },
+      "firecrawl-map": {
+        "calls": 2,
         "runs": 2
       },
       "firecrawl-search": {
@@ -58,10 +66,6 @@
         "calls": 0,
         "runs": 0
       },
-      "firecrawl-map": {
-        "calls": 0,
-        "runs": 0
-      },
       "firecrawl-monitor": {
         "calls": 0,
         "runs": 0
@@ -77,24 +81,24 @@
     },
     "firecrawl_cli": {
       "scrape": {
-        "calls": 305,
-        "runs": 15
+        "calls": 350,
+        "runs": 22
+      },
+      "search": {
+        "calls": 67,
+        "runs": 10
       },
       "interact": {
         "calls": 60,
         "runs": 6
       },
-      "search": {
-        "calls": 59,
+      "map": {
+        "calls": 36,
         "runs": 8
       },
-      "map": {
-        "calls": 34,
-        "runs": 6
-      },
       "status": {
-        "calls": 13,
-        "runs": 13
+        "calls": 17,
+        "runs": 17
       },
       "agent": {
         "calls": 2,
